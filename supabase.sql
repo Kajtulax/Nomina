@@ -13,6 +13,12 @@ create table if not exists public.profiles (
 );
 create unique index if not exists profiles_nick_unique on public.profiles (lower(nick));
 
+-- Zdjęcie profilowe (od wersji 1.0.3): ścieżka pliku w Storage, np. <id>/avatar.jpg?v=1732712345
+alter table public.profiles add column if not exists avatar text;
+alter table public.profiles drop constraint if exists avatar_path;
+alter table public.profiles add constraint avatar_path
+  check (avatar is null or avatar ~ ('^' || id::text || '/avatar\.jpg\?v=[0-9]{1,15}$'));
+
 -- Postępy nauki (prywatne — widzi je tylko właściciel)
 create table if not exists public.progress (
   user_id uuid primary key references auth.users (id) on delete cascade,
@@ -57,7 +63,7 @@ create policy "stats: właściciel zmienia" on public.stats for update to authen
   using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 grant select on public.profiles, public.stats to anon, authenticated;
-grant update (nick) on public.profiles to authenticated;
+grant update (nick, avatar) on public.profiles to authenticated;
 grant select, insert, update on public.progress to authenticated;
 grant insert, update on public.stats to authenticated;
 
@@ -65,7 +71,7 @@ grant insert, update on public.stats to authenticated;
 create or replace view public.ranking with (security_invoker = on) as
   select p.nick, s.sec, s.known, s.total, s.best_exam, s.exams,
          case when s.updated_at >= now() - interval '48 hours' then s.streak else 0 end as streak,
-         s.updated_at
+         s.updated_at, p.avatar
   from public.stats s join public.profiles p on p.id = s.user_id;
 grant select on public.ranking to anon, authenticated;
 
@@ -96,3 +102,23 @@ begin
 end $$;
 revoke execute on function public.delete_user() from public, anon;
 grant execute on function public.delete_user() to authenticated;
+
+-- Zdjęcia profilowe: publiczny folder „avatars” (każdy może obejrzeć zdjęcie, zmienić tylko własne).
+-- Jeden plik na osobę: <id>/avatar.jpg, maks. 512 KB, tylko JPG (aplikacja sama kadruje i zmniejsza zdjęcie).
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('avatars', 'avatars', true, 524288, array['image/jpeg'])
+on conflict (id) do update set public = true, file_size_limit = 524288, allowed_mime_types = array['image/jpeg'];
+
+drop policy if exists "avatars: własne czyta" on storage.objects;
+create policy "avatars: własne czyta" on storage.objects for select to authenticated
+  using (bucket_id = 'avatars' and name = (select auth.uid())::text || '/avatar.jpg');
+drop policy if exists "avatars: własne dodaje" on storage.objects;
+create policy "avatars: własne dodaje" on storage.objects for insert to authenticated
+  with check (bucket_id = 'avatars' and name = (select auth.uid())::text || '/avatar.jpg');
+drop policy if exists "avatars: własne zmienia" on storage.objects;
+create policy "avatars: własne zmienia" on storage.objects for update to authenticated
+  using (bucket_id = 'avatars' and name = (select auth.uid())::text || '/avatar.jpg')
+  with check (bucket_id = 'avatars' and name = (select auth.uid())::text || '/avatar.jpg');
+drop policy if exists "avatars: własne usuwa" on storage.objects;
+create policy "avatars: własne usuwa" on storage.objects for delete to authenticated
+  using (bucket_id = 'avatars' and name = (select auth.uid())::text || '/avatar.jpg');

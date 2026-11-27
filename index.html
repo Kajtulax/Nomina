@@ -197,15 +197,93 @@ dialog.news::backdrop{background:rgba(11,17,23,.55)}
 .news li b{display:block;font:600 15px/1.3 var(--ui);margin:1px 0 2px}
 .news li span{display:block;color:var(--muted);font-size:14px;line-height:1.45}
 .news .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:4px}
-.made .link{font-size:12px}
-.rank{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:none}
-.rank li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;border-bottom:1px dotted var(--line)}
-.rank li:nth-child(-n+3) .pos{background:var(--pin);color:var(--on-pin)}
-.rank .pos{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--ui);border:1.5px solid var(--line);font-variant-numeric:tabular-nums}
+.news .nv{margin:2px 0 -4px;font:600 12px var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--pin)}
+.made{flex-wrap:wrap}
+.made .link{font-size:12px;white-space:nowrap}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.ava{--s:32px;position:relative;flex:none;width:var(--s);height:var(--s);border-radius:50%;display:inline-grid;place-items:center;overflow:hidden;background:hsl(var(--h,210) 50% 44%);color:#fff;font:600 calc(var(--s) * .42)/1 var(--ui);font-style:normal;letter-spacing:0;text-transform:none;user-select:none}
+.ava img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--card)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ava{background:hsl(var(--h,210) 38% 36%)}}
+:root[data-theme="dark"] .ava{background:hsl(var(--h,210) 38% 36%)}
+#tab-konto.has-ava svg{display:none}
+#tab-konto .ava{--s:18px;font-size:10px}
+.k-id{display:flex;align-items:center;gap:14px;font-style:normal}
+.k-ava{position:relative;flex:none;display:block}
+.k-cam{position:absolute;right:-4px;bottom:-4px;width:30px;height:30px;border-radius:50%;background:var(--pin);color:var(--on-pin);display:grid;place-items:center;cursor:pointer;border:2px solid var(--card);box-shadow:var(--shadow)}
+.k-cam svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.k-cam:focus-within,.k-up:focus-within{outline:2px solid var(--pin);outline-offset:2px}
+.k-idt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.k-nick{font:italic 600 30px/1.1 var(--latin);overflow-wrap:anywhere}
+.k-sub{font:400 13px var(--ui);color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.k-sub #k-syncst{display:inline-flex;align-items:center;gap:6px}
+.k-sub .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}.k-sub .dot.ok{background:var(--ok)}.k-sub .dot.bad{background:var(--bad)}
+.k-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:2px 0 2px;overflow-x:auto}
+.k-tabs button{font:600 14px var(--ui);padding:9px 12px;border:0;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.k-tabs button[aria-selected=true]{color:var(--fg);border-bottom-color:var(--pin)}
+.k-tabs button:hover{color:var(--fg)}
+.k-view{display:flex;flex-direction:column;gap:14px}
+.k-h2{font:600 15px var(--ui);margin:6px 0 0}
+.k-seg{display:inline-flex;padding:3px;border-radius:10px;background:var(--plate);border:1px solid var(--line);gap:2px;max-width:100%;align-self:flex-start}
+.k-seg.wide{display:flex;align-self:stretch}
+.k-seg button{flex:1;font:600 13px var(--ui);padding:7px 14px;border:0;border-radius:7px;background:none;color:var(--muted);cursor:pointer;white-space:nowrap}
+.k-seg button[aria-pressed=true]{background:var(--card);color:var(--fg);box-shadow:0 1px 3px rgba(23,33,43,.18)}
+.k-filt{display:flex;flex-direction:column;gap:8px}
+.chips button.plain[aria-pressed=true]{border-color:var(--pin);box-shadow:0 0 0 1px var(--pin)}
+.k-perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.k-perks li{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--plate);display:flex;flex-direction:column;gap:2px;min-width:0}
+.k-perks svg,.k-stats svg{width:20px;height:20px;fill:none;stroke:var(--pin);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-bottom:4px}
+.k-perks b{font:600 14px var(--ui)}.k-perks span{font-size:12px;color:var(--muted)}
+.k-form{display:flex;flex-direction:column;gap:10px}
+.pw{position:relative;display:block}
+.pw input{padding-right:46px}
+.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.eye:hover{color:var(--fg)}
+.eye svg,.ki{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ki.sm{width:16px;height:16px;margin-right:6px;vertical-align:-3px}
+.pw-m:not([data-s]),.pw-m[data-s="-1"]{display:none}
+.pw-m{display:block;height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:2px}
+.pw-m i{display:block;height:100%;width:0;background:var(--bad);transition:width .2s,background .2s}
+.pw-m[data-s="2"] i{background:var(--pin)}.pw-m[data-s="3"] i,.pw-m[data-s="4"] i{background:var(--ok)}
+.hint{font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted)}
+.hint.ok{color:var(--ok)}.hint.bad{color:var(--bad)}
+.hint:empty{display:none}
+.k-secs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.k-sec{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--plate);display:flex;flex-direction:column;gap:6px;min-width:0}
+.k-sec .lab{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.k-sec b{font:600 28px/1.05 var(--ui)}.k-sec b small{font-size:15px;color:var(--muted);font-weight:500}
+.k-sec .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.k-sec .bar i{display:block;height:100%;background:var(--pin);border-radius:3px}
+.k-sec em{font-style:normal;font-size:12px;color:var(--muted)}
+.k-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.k-stats div{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.k-stats b{font:600 22px/1.1 var(--ui)}.k-stats span{font-size:12px;color:var(--muted)}
+.k-tip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px dashed var(--pin);border-radius:12px;padding:10px 12px;background:var(--pin-bg)}
+.k-tip>span:not(.ava){flex:1;min-width:150px;font-size:14px}
+.k-up{display:inline-flex;align-items:center;gap:6px;cursor:pointer;position:relative}
+.k-up svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.k-card{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.k-card h3{margin:0;font:600 15px var(--ui)}
+.k-photo{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.link.danger{color:var(--bad)}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rank li{display:grid;grid-template-columns:28px 32px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 8px;border-radius:10px}
+.rank li:nth-child(odd){background:var(--plate)}
+.rank .pos{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--ui);color:var(--muted);font-variant-numeric:tabular-nums}
+.rank li.p1 .pos{background:#e0a526;color:#3b2a00}.rank li.p2 .pos{background:#b9c2cc;color:#1f2933}.rank li.p3 .pos{background:#c98a57;color:#2d1606}
 .rank .nk{font-weight:600;overflow-wrap:anywhere}
-.rank .val{font:600 15px var(--ui);font-variant-numeric:tabular-nums}.rank .val small{color:var(--muted);font-weight:400}
-.rank li.me{background:var(--pin-bg);border:1px solid var(--pin)}
-.seg{gap:6px}
+.rank .val{font:600 15px var(--ui);font-variant-numeric:tabular-nums;white-space:nowrap}.rank .val small{color:var(--muted);font-weight:400}
+.rank li.me{background:var(--pin-bg);box-shadow:inset 0 0 0 1px var(--pin)}
+.rank.sk li .nk{height:12px;width:60%;border-radius:6px;background:var(--line)}
+.rank.sk .ava{background:var(--line)}
+.k-me{display:flex;align-items:center;gap:12px;border-radius:12px;padding:10px 12px;background:var(--pin-bg);border:1px solid var(--pin)}
+.k-me>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.k-me b{font:600 15px var(--ui)}.k-me div span{font-size:13px;color:var(--muted)}
+.k-me .val{font:600 18px var(--ui);white-space:nowrap}.k-me .val small{color:var(--muted);font-weight:400;font-size:13px}
+.k-crop .crop{display:grid;place-items:center}
+.k-crop canvas{width:min(300px,72vw);height:auto;aspect-ratio:1;border-radius:12px;touch-action:none;cursor:grab;background:var(--plate)}
+.k-crop canvas:active{cursor:grabbing}
+.k-crop canvas:focus-visible{outline:2px solid var(--pin);outline-offset:2px}
+.k-crop label.in{display:flex;flex-direction:column;gap:4px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.k-crop input[type=range]{width:100%;accent-color:var(--pin)}
+@media (max-width:760px){.k-perks{gap:6px}.k-perks li{padding:8px 6px;align-items:center;text-align:center}.k-perks svg{margin:0 0 2px}.k-perks b{font-size:12px}.k-perks span{display:none}.k-nick{font-size:24px}.k-id{gap:12px}.k-secs{gap:8px}.k-sec{padding:10px}.k-sec b{font-size:22px}.k-stats{gap:6px}.k-stats div{padding:8px}.k-stats b{font-size:18px}.k-card{padding:12px}}
 .filebtn input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
 .filebtn:focus-within{outline:2px solid var(--pin);outline-offset:2px}
 .term .sub i{font:italic 500 18px var(--latin)}
@@ -595,7 +673,7 @@ function mergeRemote(d){
   if(changed){LS.set('osteo-prog',prog);if(TAB==='postepy')gRender();else if(TAB==='atlas')aRender()}
   return localNewer;
 }
-function syncNote(){const el=$('#g-sync');if(!el)return;el.textContent=sync.state==='synced'?(SB&&acct.me?'Postępy zapisują się na koncie '+acct.me.nick+' — zobaczysz je na każdym urządzeniu po zalogowaniu.':'Postępy zapisują się automatycznie — zobaczysz je też na innym urządzeniu.'):(SB&&acct.on?'Postępy czekają na połączenie z serwerem kont — zapiszą się, gdy wróci internet.':SB?'Postępy zapisują się tylko w tej przeglądarce. Załóż konto albo zaloguj się, żeby mieć je na każdym urządzeniu.':'Postępy zapisują się tylko w tej przeglądarce.')}
+function syncNote(){const el=$('#g-sync');if(!el)return;el.textContent=sync.state==='synced'?(SB&&acct.me?'Postępy zapisują się na koncie '+acct.me.nick+' — zobaczysz je na każdym urządzeniu po zalogowaniu.':'Postępy zapisują się automatycznie — zobaczysz je też na innym urządzeniu.'):(SB&&acct.on?'Postępy czekają na połączenie z serwerem kont — zapiszą się, gdy wróci internet.':SB?'Postępy zapisują się tylko w tej przeglądarce. Załóż konto albo zaloguj się, żeby mieć je na każdym urządzeniu.':'Postępy zapisują się tylko w tej przeglądarce.');if(SB)kSyncUpd()}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&sync.dirty){clearTimeout(sync.timer);sync.push()}});
 
 // ---------- ocena odpowiedzi ----------
@@ -1302,14 +1380,15 @@ document.addEventListener('keydown',e=>{
 
 // ---------- konta (Supabase, tylko wersja na GitHub Pages) ----------
 const SB=(()=>{try{const c=window.NOMINA_SUPABASE;if(window.claude||!c||!/^https?:\/\//.test(c.url||'')||!c.key)return null;return {url:c.url.trim().replace(/\/+$/,'').replace(/\/(rest|auth)\/v1.*$/,''),key:String(c.key).trim()}}catch(e){return null}})();
-const acct={s:null,me:null,mode:'login',msg:null,busy:false,recovery:false,rank:{sec:'kosci',by:'known',rows:null,err:null,t:0},remote:{},del:false,
+const acct={s:null,me:null,mode:'login',view:'profil',msg:null,busy:false,recovery:false,rank:{sec:'kosci',by:'known',rows:null,err:null,t:0},remote:{},del:false,eye:{},nk:{v:'',ok:null,t:''},noAva:false,
   get on(){return !!(this.s&&this.s.access_token)}};
 const AERR={invalid_credentials:'Nieprawidłowy e-mail lub hasło.',invalid_grant:'Nieprawidłowy e-mail lub hasło.',email_not_confirmed:'Najpierw potwierdź adres e-mail — kliknij link w wiadomości od nas (sprawdź też spam).',
   user_already_exists:'Konto z tym adresem już istnieje. Zaloguj się albo zresetuj hasło.',email_exists:'Konto z tym adresem już istnieje. Zaloguj się albo zresetuj hasło.',
   weak_password:'Hasło jest za słabe — użyj co najmniej 8 znaków, w tym cyfry.',over_email_send_rate_limit:'Wysłano już kilka wiadomości. Spróbuj ponownie za kilka minut.',
   over_request_rate_limit:'Za dużo prób w krótkim czasie. Odczekaj chwilę.',email_address_invalid:'Ten adres e-mail jest nieprawidłowy.',validation_failed:'Sprawdź poprawność adresu e-mail i hasła.',
   same_password:'Nowe hasło musi się różnić od obecnego.',signup_disabled:'Rejestracja jest wyłączona.',user_not_found:'Nie znaleziono konta.',
-  '23505':'Ten nick jest już zajęty — wybierz inny.','23514':'Nick może mieć 3–20 znaków: litery, cyfry, kropkę, myślnik lub podkreślenie.'};
+  '23505':'Ten nick jest już zajęty — wybierz inny.','23514':'Nick może mieć 3–20 znaków: litery, cyfry, kropkę, myślnik lub podkreślenie.',
+  '42703':'Ta funkcja nie jest jeszcze włączona na serwerze.'};
 function aErr(j,status){
   const k=j&&(j.error_code||j.code||j.error);
   if(k&&AERR[k])return AERR[k];
@@ -1318,6 +1397,10 @@ function aErr(j,status){
   if(/database error saving new user/i.test(m))return 'Nie udało się założyć konta — ten nick jest już zajęty albo ma niedozwolone znaki. Wybierz inny.';
   if(/already registered/i.test(m))return AERR.user_already_exists;
   if(/password/i.test(m)&&/(at least|weak|short)/i.test(m))return AERR.weak_password;
+  // Storage (zdjęcia profilowe)
+  if(/exceeded the maximum allowed size|payload too large/i.test(m)||status===413)return 'Zdjęcie jest za duże.';
+  if(/mime type/i.test(m))return 'Nieobsługiwany format zdjęcia — wybierz JPG albo PNG.';
+  if(/bucket not found/i.test(m))return 'Zdjęcia profilowe są chwilowo niedostępne.';
   if(status===429)return AERR.over_request_rate_limit;
   if(status>=500)return 'Serwer kont chwilowo nie odpowiada. Spróbuj za moment.';
   return m||('Błąd ('+status+').');
@@ -1327,14 +1410,16 @@ function authFromToken(j){return j&&j.access_token?{access_token:j.access_token,
 async function sbReq(path,o){
   o=o||{};
   if(o.auth!==false&&acct.s){await authFresh();if(!acct.s){const e=new Error('Sesja wygasła — zaloguj się ponownie.');e.code='session';throw e}}
-  const h={apikey:SB.key,'Content-Type':'application/json'};
+  const h={apikey:SB.key,'Content-Type':o.ctype||'application/json'};
   if(o.auth!==false&&acct.s)h.Authorization='Bearer '+acct.s.access_token;
   if(o.prefer)h.Prefer=o.prefer;
+  Object.assign(h,o.headers||{});
   let r;
-  try{r=await fetch(SB.url+path,{method:o.method||'GET',headers:h,body:o.body!==undefined?JSON.stringify(o.body):undefined,keepalive:!!o.keepalive&&document.visibilityState==='hidden'})}
+  try{r=await fetch(SB.url+path,{method:o.method||'GET',headers:h,body:o.raw!==undefined?o.raw:o.body!==undefined?JSON.stringify(o.body):undefined,keepalive:!!o.keepalive&&document.visibilityState==='hidden'})}
   catch(e){const x=new Error('Brak połączenia z serwerem kont. Postępy zapisują się w tej przeglądarce i wyślą się później.');x.code='unavailable';throw x}
   const txt=await r.text();let j=null;try{j=txt?JSON.parse(txt):null}catch(e){}
-  if(r.status===401&&o.auth!==false&&acct.s&&!o.retried){acct.s.expires_at=0;return sbReq(path,Object.assign({},o,{retried:true}))}
+  const expired=r.status===401||(!r.ok&&/jwt expired/i.test(String(j&&(j.message||j.msg)||'')));
+  if(expired&&o.auth!==false&&acct.s&&!o.retried){acct.s.expires_at=0;return sbReq(path,Object.assign({},o,{retried:true}))}
   if(!r.ok){const e=new Error(aErr(j,r.status));e.status=r.status;e.code=r.status>=500||r.status===429?'unavailable':((j&&(j.error_code||j.code||j.error))||'denied');throw e}
   return j;
 }
@@ -1373,15 +1458,23 @@ function statsPush(){
   statsTimer=setTimeout(async()=>{
     try{const rows=['kosci','wiezadla'].map(sec=>Object.assign({user_id:acct.s.user.id,updated_at:new Date().toISOString()},secStats(sec)));
       await sbReq('/rest/v1/stats?on_conflict=user_id,sec',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',body:rows});
-      rows.forEach(r=>{acct.remote[r.sec]=r});acct.rank.t=0}catch(e){}
+      rows.forEach(r=>{acct.remote[r.sec]=r});acct.rank.t=0;if(TAB==='konto'&&acct.view==='ranking')kRankLoad(false)}catch(e){}
   },800);
+}
+async function profileGet(id){
+  // starsza baza (sprzed 1.0.3) nie ma kolumny avatar — wtedy działaj bez zdjęć
+  if(!acct.noAva){
+    try{return await sbReq('/rest/v1/profiles?select=nick,created_at,avatar&id=eq.'+id)}
+    catch(e){if(e.code!=='42703')throw e;acct.noAva=true}
+  }
+  return sbReq('/rest/v1/profiles?select=nick,created_at&id=eq.'+id);
 }
 async function acctLoad(){
   // profil i statystyki zalogowanego użytkownika, potem dołączenie zapisu postępów
   acct.loading=true;
   try{
     if(!acct.s.user||!acct.s.user.id){const u=await sbReq('/auth/v1/user');acct.s.user={id:u.id,email:u.email};authSave(acct.s)}
-    const [pr,st]=await Promise.all([sbReq('/rest/v1/profiles?select=nick,created_at&id=eq.'+acct.s.user.id),sbReq('/rest/v1/stats?select=sec,best_exam,exams&user_id=eq.'+acct.s.user.id)]);
+    const [pr,st]=await Promise.all([profileGet(acct.s.user.id),sbReq('/rest/v1/stats?select=sec,best_exam,exams&user_id=eq.'+acct.s.user.id)]);
     acct.me=pr&&pr[0]?pr[0]:{nick:'?'};acct.remote={};(st||[]).forEach(r=>{acct.remote[r.sec]=r});
     kTab();
     await sync.attach(sbRef());statsPush();
@@ -1420,25 +1513,82 @@ async function acctInit(){
     else if(was&&n.user&&n.user.id===was){acct.s=n}
     else location.reload();
   });
+  // zdjęcie, którego nie da się wczytać → zostają inicjały
+  document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.parentNode&&t.parentNode.classList&&t.parentNode.classList.contains('ava'))t.remove()},true);
 }
-function kTab(){const t=$('#tab-konto span');if(t)t.textContent=acct.on&&acct.me&&acct.me.nick?acct.me.nick:'Konto'}
+// ---------- awatary ----------
+const AVA_RE=/^[0-9a-f-]{36}\/avatar\.jpg\?v=\d{1,15}$/;
+const avaURL=a=>SB&&!acct.noAva&&a&&AVA_RE.test(a)?SB.url+'/storage/v1/object/public/avatars/'+a:'';
+function ava(p,size,tag){
+  tag=tag||'span';const n=String((p&&p.nick)||'?'),u=avaURL(p&&p.avatar);
+  let hu=7;for(const c of n.toLowerCase())hu=(hu*31+c.codePointAt(0))%360;
+  return `<${tag} class="ava" style="--s:${size}px;--h:${hu}" aria-hidden="true">${esc(n.charAt(0).toUpperCase())}${u?`<img src="${esc(u)}" alt="" decoding="async">`:''}</${tag}>`;
+}
+const KI={
+  cam:'<path d="M3.5 8.5a2 2 0 0 1 2-2h2l1.5-2h6l1.5 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/>',
+  eye:'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  eyeOff:'<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/>',
+  sync:'<path d="M19.5 10.5A7.7 7.7 0 0 0 5.8 7L4.5 8.5"/><path d="M4.5 4v4.5H9"/><path d="M4.5 13.5A7.7 7.7 0 0 0 18.2 17l1.3-1.5"/><path d="M19.5 20v-4.5H15"/>',
+  trophy:'<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/><path d="M12 14v4M8.5 20.5h7"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 20.5c1.4-3.8 4.4-5.5 8-5.5s6.6 1.7 8 5.5"/>',
+  flame:'<path d="M12 21c-4 0-7-2.7-7-6.5 0-3 2-5 3.5-6.5.3 1.8 1.2 3 2.5 3.5C11 8 12 5 14.5 3c.2 3 1.6 4.6 2.8 6.1C18.4 10.5 19 12 19 14.5 19 18.3 16 21 12 21z"/>',
+  exam:'<circle cx="12" cy="13.5" r="7.5"/><path d="M12 13.5V9.5M9.5 2.5h5"/>',
+  logout:'<path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 16l-4-4 4-4M6 12h10"/>'
+};
+const ki=(k,c)=>`<svg class="${c||'ki'}" viewBox="0 0 24 24" aria-hidden="true">${KI[k]}</svg>`;
+function kTab(){
+  const a=$('#tab-konto');if(!a)return;
+  const on=acct.on&&acct.me&&acct.me.nick,lab=a.querySelector('span');if(lab)lab.textContent=on?acct.me.nick:'Konto';
+  const old=a.querySelector('i.ava');if(old)old.remove();
+  if(on){a.insertAdjacentHTML('afterbegin',ava(acct.me,20,'i'));a.classList.add('has-ava')}else a.classList.remove('has-ava');
+}
 function wipeLocal(){prog={items:{},best:0,t:0,reset:0,days:{},exams:[]};LS.set('osteo-prog',prog);P.dirty=true;sync.ref=null;sync.dirty=false;sync.state='local'}
-const fld=(id,lab,type,ac,extra)=>`<label class="in">${lab}<input type="${type}" id="${id}" autocomplete="${ac}" autocapitalize="off" spellcheck="false"${extra||''}></label>`;
+// ---------- pola formularzy ----------
+const fld=(id,lab,type,ac,extra,after)=>`<label class="in">${lab}<input type="${type}" id="${id}" class="plin" autocomplete="${ac}" autocapitalize="off" spellcheck="false"${extra||''}>${after||''}</label>`;
+const pwd=(id,lab,ac,meter)=>{const v=!!acct.eye[id];return `<label class="in">${lab}<span class="pw"><input type="${v?'text':'password'}" id="${id}" class="plin" autocomplete="${ac}" autocapitalize="off" spellcheck="false"${meter?` data-inp="kPwIn"`:''}><button type="button" class="eye" data-act="kEye" data-v="${id}" aria-label="${v?'Ukryj hasło':'Pokaż hasło'}" aria-pressed="${v}">${ki(v?'eyeOff':'eye')}</button></span>${meter?`<span class="pw-m" id="${id}-m" aria-hidden="true"><i></i></span><small class="hint" id="${id}-h" aria-live="polite"></small>`:''}</label>`};
+const nickFld=(lab,value)=>fld('k-nick',lab,'text','nickname',` maxlength="20" data-inp="kNickIn"${value?` value="${esc(value)}"`:''}`,`<small class="hint" id="k-nick-h" aria-live="polite"></small>`);
 const kMsg=()=>acct.msg?`<p class="status ${acct.msg.ok?'ok':'bad'}" role="${acct.msg.ok?'status':'alert'}">${esc(acct.msg.t)}</p>`:'';
+function pwScore(p){if(!p)return -1;if(p.length<8)return 0;let s=1;if(p.length>=12)s++;if(/\d/.test(p)&&/[^\d]/.test(p))s++;if(/[A-ZĄĆĘŁŃÓŚŹŻ]/.test(p)&&/[a-ząćęłńóśźż]/.test(p)||/[^A-Za-z0-9ĄĆĘŁŃÓŚŹŻąćęłńóśźż]/.test(p))s++;return Math.min(s,4)}
+function pwShow(id){
+  const i=$('#'+id),m=$('#'+id+'-m'),h=$('#'+id+'-h');if(!i||!m||!h)return;
+  const s=pwScore(i.value),lab=['za krótkie — min. 8 znaków','słabe','średnie','dobre','mocne'];
+  m.dataset.s=s;m.firstChild.style.width=s<0?'0':((s+1)*20)+'%';h.textContent=s<0?'':'Hasło: '+lab[s];h.className='hint'+(s===0?' bad':s>=3?' ok':'');
+}
+let nickTimer=0;
+function nickShow(){
+  const h=$('#k-nick-h'),i=$('#k-nick');if(!h||!i)return;
+  const v=i.value.trim(),N=acct.nk;
+  if(!v||(acct.me&&v===acct.me.nick)){h.textContent='';h.className='hint';return}
+  if(!NICK_RE.test(v)){h.textContent='3–20 znaków: litery, cyfry, kropka, myślnik, podkreślenie';h.className='hint bad';return}
+  if(N.v.toLowerCase()===v.toLowerCase()&&N.ok!==null){h.textContent=N.ok?'✓ Nick wolny':'✕ Ten nick jest zajęty';h.className='hint '+(N.ok?'ok':'bad');return}
+  h.textContent='Sprawdzam…';h.className='hint';
+}
+function nickCheck(){
+  clearTimeout(nickTimer);nickShow();
+  const i=$('#k-nick');const v=i?i.value.trim():'';
+  if(!v||!NICK_RE.test(v)||(acct.me&&v.toLowerCase()===acct.me.nick.toLowerCase())||(acct.nk.v.toLowerCase()===v.toLowerCase()&&acct.nk.ok!==null))return;
+  nickTimer=setTimeout(async()=>{
+    try{const ok=await sbReq('/rest/v1/rpc/nick_available',{method:'POST',auth:false,body:{n:v}});acct.nk={v,ok:ok!==false}}catch(e){acct.nk={v:'',ok:null}}
+    nickShow();
+  },400);
+}
+// ---------- ranking ----------
+const osoby=n=>n===1?'osoba':(n%10>=2&&n%10<=4&&(n%100<12||n%100>14))?'osoby':'osób';
+const METRIC={known:'Opanowane struktury',best_exam:'Najlepsze kolokwium',streak:'Seria dni'};
+const rVal=(r,by)=>by==='known'?`${r.known}<small>/${r.total}</small>`:by==='best_exam'?`${r.best_exam}<small>%</small>`:`${r.streak}<small> ${r.streak===1?'dzień':'dni'}</small>`;
 function kRank(){
-  const R=acct.rank,metric={known:'opanowane',best_exam:'kolokwium',streak:'seria'};
-  let h='<h2>Ranking</h2><div class="row">'+['kosci','wiezadla'].map(s=>`<button class="${R.sec===s?'go sm':'ghost'}" data-act="kSec" data-v="${s}">${SECS[s].name}</button>`).join('')+'</div>'
-    +'<div class="chips">'+Object.keys(metric).map(m=>`<button class="plain"${R.by===m?' aria-pressed="true" style="border-color:var(--pin);box-shadow:0 0 0 1px var(--pin)"':''} data-act="kBy" data-v="${m}">${{known:'Opanowane struktury',best_exam:'Najlepsze kolokwium',streak:'Seria dni'}[m]}</button>`).join('')+'</div>';
-  if(R.err)h+=`<p class="note">${esc(R.err)}</p>`;
-  else if(!R.rows)h+='<p class="note">Wczytywanie…</p>';
-  else if(!R.rows.length)h+='<p class="note">Nikt jeszcze nie ma wyników w tej kategorii. Możesz być pierwszy!</p>';
-  else{
-    const my=acct.me&&acct.me.nick;
-    h+='<ol class="rank">'+R.rows.map((r,i)=>{const v=R.by==='known'?`${r.known}<small>/${r.total}</small>`:R.by==='best_exam'?`${r.best_exam}<small>%</small>`:`${r.streak}<small> dni</small>`;
-      return `<li class="${r.nick===my?'me':''}"><span class="pos">${i+1}</span><span class="nk">${esc(r.nick)}</span><span class="val">${v}</span></li>`}).join('')+'</ol>';
-    if(my&&!R.rows.some(r=>r.nick===my))h+='<p class="note">Nie ma Cię jeszcze w pierwszej setce — ucz się dalej!</p>';
+  const R=acct.rank;
+  let h=`<div class="k-filt"><div class="k-seg" role="group" aria-label="Dział">${['kosci','wiezadla'].map(s=>`<button data-act="kSec" data-v="${s}" aria-pressed="${R.sec===s}">${SECS[s].name}</button>`).join('')}</div>`
+    +`<div class="chips" role="group" aria-label="Kategoria">${Object.keys(METRIC).map(m=>`<button class="plain" data-act="kBy" data-v="${m}" aria-pressed="${R.by===m}">${METRIC[m]}</button>`).join('')}</div></div>`;
+  if(R.err)return h+`<p class="note">${esc(R.err)}</p>`;
+  if(!R.rows)return h+'<ol class="rank sk" aria-hidden="true">'+'<li><span class="pos"></span><span class="ava" style="--s:32px"></span><span class="nk"></span><span class="val"></span></li>'.repeat(4)+'</ol>';
+  const my=acct.on&&acct.me&&acct.me.nick,mi=my?R.rows.findIndex(r=>r.nick===my):-1;
+  if(my){
+    const s=secStats(R.sec),mv=R.by==='known'?s.known:R.by==='best_exam'?s.best_exam:s.streak;
+    h+=`<div class="k-me">${ava(acct.me,40)}<div><b>${mi>=0?`Jesteś na ${mi+1}. miejscu`:mv?'Jesteś poza pierwszą setką':'Jeszcze Cię tu nie ma'}</b><span>${mi>=0?`w tej kategorii: ${R.rows.length}${R.rows.length>=100?'+':''} ${osoby(R.rows.length)}`:mv?'Ucz się dalej, żeby awansować!':R.by==='best_exam'?'Zrób kolokwium (min. 10 stanowisk), żeby pojawić się w rankingu.':R.by==='streak'?'Ucz się codziennie, żeby zbudować serię.':'Opanuj pierwszą strukturę, żeby pojawić się w rankingu.'}</span></div>${mi>=0?`<span class="val">${rVal(R.rows[mi],R.by)}</span>`:''}</div>`;
   }
-  return h;
+  if(!R.rows.length)return h+'<p class="note">Nikt jeszcze nie ma wyników w tej kategorii. Możesz być pierwszy!</p>';
+  return h+'<ol class="rank">'+R.rows.map((r,i)=>`<li class="${r.nick===my?'me':''}${i<3?' p'+(i+1):''}"><span class="pos">${i+1}</span>${ava(r,32)}<span class="nk">${esc(r.nick)}</span><span class="val">${rVal(r,R.by)}</span></li>`).join('')+'</ol>';
 }
 async function kRankLoad(force){
   // jedno zapytanie naraz; po błędzie nie ponawiaj sam częściej niż co 30 s (bez pętli przy awarii serwera)
@@ -1447,64 +1597,169 @@ async function kRankLoad(force){
   R.loading=true;R.err=null;
   const ord={known:'known.desc,best_exam.desc',best_exam:'best_exam.desc,known.desc',streak:'streak.desc,known.desc'}[R.by];
   const flt=R.by==='best_exam'?'&best_exam=gt.0':R.by==='streak'?'&streak=gt.0':'&known=gt.0';
-  const key=R.sec+R.by;
-  try{const rows=await sbReq(`/rest/v1/ranking?select=nick,known,total,best_exam,streak&sec=eq.${R.sec}${flt}&order=${ord}&limit=100`,{auth:acct.on});if(key===R.sec+R.by)R.rows=rows}
-  catch(e){if(key===R.sec+R.by){R.rows=null;R.err=e.code==='unavailable'?'Ranking jest chwilowo niedostępny — brak połączenia z serwerem.':e.message}}
+  const key=R.sec+R.by,q=c=>sbReq(`/rest/v1/ranking?select=${c}&sec=eq.${R.sec}${flt}&order=${ord}&limit=100`,{auth:acct.on});
+  try{
+    let rows;
+    if(acct.noAva)rows=await q('nick,known,total,best_exam,streak');
+    else try{rows=await q('nick,known,total,best_exam,streak,avatar')}catch(e){if(e.code!=='42703')throw e;acct.noAva=true;rows=await q('nick,known,total,best_exam,streak')}
+    if(key===R.sec+R.by)R.rows=rows;
+  }catch(e){if(key===R.sec+R.by){R.rows=null;R.err=e.code==='unavailable'?'Ranking jest chwilowo niedostępny — brak połączenia z serwerem.':e.message}}
   R.t=Date.now();R.loading=false;
   if(key!==R.sec+R.by)return kRankLoad(true);
   if(TAB==='konto')kRender();
 }
+// ---------- widok konta ----------
 function kRender(){
   if(!SB)return;
   const el=$('#k-panel');let body='';
   const keep={},fid=document.activeElement&&el.contains(document.activeElement)?document.activeElement.id:'';
-  if(!acct.fresh)el.querySelectorAll('input[id]').forEach(i=>{if(i.value)keep[i.id]=i.value});
+  if(!acct.fresh)el.querySelectorAll('input[id]:not([type=file]):not([type=range])').forEach(i=>{if(i.value)keep[i.id]=i.value});
   acct.fresh=false;
   const done=()=>{for(const id in keep){const i=$('#'+id);if(i)i.value=keep[id]}
+    ['k-pass','k-np'].forEach(pwShow);nickShow();
     const f=fid&&$('#'+fid);if(f){f.focus();try{const n=f.value.length;f.setSelectionRange(n,n)}catch(e){}}
     else if(acct.msg&&!acct.msg.ok&&!acct.busy){const b=el.querySelector('.status');if(b&&b.scrollIntoView&&b.getBoundingClientRect().top<0)b.scrollIntoView({block:'center'})}};
+  const dis=acct.busy?' disabled':'';
   if(acct.recovery&&acct.on){
-    body=kMsg()+`<form data-form="kNewPass" novalidate>${fld('k-np','Nowe hasło','password','new-password',' minlength="8"')}${fld('k-np2','Powtórz nowe hasło','password','new-password')}<div class="row"><button class="go"${acct.busy?' disabled':''}>Zapisz nowe hasło</button></div></form>`;
+    body=kMsg()+`<form data-form="kNewPass" novalidate class="k-form">${pwd('k-np','Nowe hasło','new-password',1)}${pwd('k-np2','Powtórz nowe hasło','new-password')}<div class="row"><button class="go"${dis}>Zapisz nowe hasło</button></div></form>`;
     panel(el,{label:'Konto',term:'Nowe hasło',body,calm:true});return done();
   }
   if(!acct.on){
-    const tabs=`<div class="row seg">${[['login','Zaloguj się'],['register','Załóż konto']].map(([m,t])=>`<button class="${acct.mode===m?'go sm':'ghost'}" data-act="kMode" data-v="${m}">${t}</button>`).join('')}</div>`;
+    const perks=`<ul class="k-perks"><li>${ki('sync')}<b>Postępy wszędzie</b><span>telefon i komputer</span></li><li>${ki('trophy')}<b>Ranking</b><span>porównaj się z innymi</span></li><li>${ki('user')}<b>Profil</b><span>ze zdjęciem i wynikami</span></li></ul>`;
+    const seg=`<div class="k-seg wide" role="group" aria-label="Logowanie lub rejestracja">${[['login','Zaloguj się'],['register','Załóż konto']].map(([m,t])=>`<button data-act="kMode" data-v="${m}" aria-pressed="${acct.mode===m}">${t}</button>`).join('')}</div>`;
     let f;
-    if(acct.mode==='register')f=`<form data-form="kRegister" novalidate>${fld('k-nick','Nick (widoczny w rankingu)','text','nickname',' maxlength="20" class="plin"')}${fld('k-email','E-mail','email','email')}${fld('k-pass','Hasło (min. 8 znaków)','password','new-password')}${fld('k-pass2','Powtórz hasło','password','new-password')}<p class="note">Postępy z tej przeglądarki zostaną przeniesione na nowe konto.</p><div class="row"><button class="go"${acct.busy?' disabled':''}>${acct.busy?'Zakładanie…':'Załóż konto'}</button></div></form>`;
-    else if(acct.mode==='reset')f=`<form data-form="kReset" novalidate>${fld('k-email','E-mail konta','email','email')}<p class="note">Wyślemy link do ustawienia nowego hasła.</p><div class="row"><button class="go"${acct.busy?' disabled':''}>Wyślij link</button><button type="button" class="link" data-act="kMode" data-v="login">wróć do logowania</button></div></form>`;
-    else f=`<form data-form="kLogin" novalidate>${fld('k-email','E-mail','email','email')}${fld('k-pass','Hasło','password','current-password')}<div class="row"><button class="go"${acct.busy?' disabled':''}>${acct.busy?'Logowanie…':'Zaloguj się'}</button><button type="button" class="link" data-act="kMode" data-v="reset">Nie pamiętasz hasła?</button></div></form>`;
-    body=`<p class="note">Konto zapisuje postępy na serwerze — zalogujesz się na telefonie i komputerze i wszędzie zobaczysz to samo. Nick pojawi się w rankingu (e-mail nigdy nie jest pokazywany).</p>`+(acct.mode==='reset'?'':tabs)+kMsg()+f+kRank();
+    if(acct.mode==='register')f=`<form data-form="kRegister" novalidate class="k-form">${nickFld('Nick — widoczny w rankingu')}${fld('k-email','E-mail','email','email')}${pwd('k-pass','Hasło','new-password',1)}${pwd('k-pass2','Powtórz hasło','new-password')}<p class="note">Postępy z tej przeglądarki zostaną przeniesione na nowe konto. E-mail nigdy nie jest pokazywany innym.</p><div class="row"><button class="go"${dis}>${acct.busy?'Zakładanie…':'Załóż konto'}</button></div></form>`;
+    else if(acct.mode==='reset')f=`<form data-form="kReset" novalidate class="k-form">${fld('k-email','E-mail konta','email','email')}<p class="note">Wyślemy link do ustawienia nowego hasła.</p><div class="row"><button class="go"${dis}>Wyślij link</button><button type="button" class="link" data-act="kMode" data-v="login">wróć do logowania</button></div></form>`;
+    else f=`<form data-form="kLogin" novalidate class="k-form">${fld('k-email','E-mail','email','email')}${pwd('k-pass','Hasło','current-password')}<div class="row"><button class="go"${dis}>${acct.busy?'Logowanie…':'Zaloguj się'}</button><button type="button" class="link" data-act="kMode" data-v="reset">Nie pamiętasz hasła?</button></div></form>`;
+    body=(acct.mode==='reset'?'':perks+seg)+kMsg()+f+'<h2 class="k-h2">Ranking</h2>'+kRank();
     panel(el,{label:'Konto',term:acct.mode==='register'?'Załóż konto':acct.mode==='reset'?'Reset hasła':'Zaloguj się',body,calm:true});done();
-  }else{
-    const me=acct.me||{},cards=['kosci','wiezadla'].map(sec=>{const s=secStats(sec);return `<div class="tile"><span>${SECS[sec].name}</span><b>${s.known}<small style="font-size:15px;color:var(--muted)">/${s.total}</small></b><em>opanowane · kolokwium ${s.best_exam}% · ${s.exams} podejść</em></div>`}).join('');
-    const ex=prog.exams.slice(-8).reverse();
-    body=kMsg()+(sync.ref?'':`<div class="confirm"><span>${acct.loading?'Łączenie z serwerem kont…':'Brak połączenia z serwerem kont. Ucz się dalej — postępy zapisują się w tej przeglądarce i wyślą się, gdy połączenie wróci.'}</span>${acct.loading?'':'<button class="ghost" data-act="kRetry">Połącz ponownie</button>'}</div>`)+`<div class="tiles">${cards}<div class="tile"><span>Seria dni</span><b>${dayStreak()}</b><em>${sync.state==='synced'?'zapisano na koncie':'czeka na wysłanie'}</em></div></div>`
-      +(ex.length?'<h2>Ostatnie kolokwia</h2><ul class="exams">'+ex.map(x=>{const d=new Date(x.t*1000),pc=x.m?Math.round(x.p/x.m*100):0;return `<li><span class="dt">${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}</span><span class="sc">${esc(SECS[x.sec||'kosci'].name)} · ${esc(x.sc==='all'?'całość':x.sc)} · ${x.n} st.</span><span class="pt">${x.p}/${x.m}<small>${pc}%</small></span></li>`}).join('')+'</ul>':'')
-      +kRank()
-      +`<h2>Ustawienia konta</h2><p class="note">E-mail: <b>${esc((acct.s.user&&acct.s.user.email)||'')}</b>${me.created_at?' · konto od '+new Date(me.created_at).toLocaleDateString('pl-PL'):''}</p>`
-      +`<form data-form="kNick" novalidate class="inline">${fld('k-nick','Zmień nick','text','nickname',` maxlength="20" class="plin" value="${esc(me.nick||'')}"`)}<div class="row"><button class="ghost"${acct.busy?' disabled':''}>Zapisz nick</button></div></form>`
-      +`<form data-form="kNewPass" novalidate>${fld('k-np','Nowe hasło','password','new-password')}${fld('k-np2','Powtórz nowe hasło','password','new-password')}<div class="row"><button class="ghost"${acct.busy?' disabled':''}>Zmień hasło</button></div></form>`
-      +'<div class="row"><button class="ghost" data-act="kLogout">Wyloguj się</button>'+(acct.del?'':'<button class="link" data-act="kDel">usuń konto</button>')+'</div>'
-      +(acct.del?'<div class="confirm"><span>Usunąć konto razem z postępami i wpisem w rankingu? Tego nie da się cofnąć.</span><button class="go" data-act="kDelYes" style="background:var(--bad)">Tak, usuń konto</button><button class="ghost" data-act="kDelNo">Anuluj</button></div>':'');
-    panel(el,{label:'Konto',term:esc(me.nick||'…'),body,calm:true});done();
+    kRankLoad(false);return;
   }
-  kRankLoad(false);
+  const me=acct.me||{nick:'…'},V=acct.view,since=me.created_at?new Date(me.created_at).toLocaleDateString('pl-PL'):'';
+  const camBtn=(cls,txt)=>acct.noAva?'':`<label class="${cls}"${txt?'':' title="Zmień zdjęcie profilowe"'}><input type="file" id="k-file${txt?'2':''}" accept="image/*" data-chg="kFile" class="vh">${ki('cam')}${txt?`<span>${txt}</span>`:'<span class="vh">Zmień zdjęcie profilowe</span>'}</label>`;
+  const head=`<span class="k-id"><span class="k-ava">${ava(me,72)}${camBtn('k-cam')}</span><span class="k-idt"><span class="k-nick">${esc(me.nick)}</span><span class="k-sub">${since?'konto od '+since+' · ':''}<span id="k-syncst">${kSyncHTML()}</span></span></span></span>`;
+  const nav=`<div class="k-tabs" role="tablist">${[['profil','Profil'],['ranking','Ranking'],['ustawienia','Ustawienia']].map(([v,t])=>`<button role="tab" id="k-t-${v}" aria-selected="${V===v}" data-act="kView" data-v="${v}">${t}</button>`).join('')}</div>`;
+  const off=sync.ref?'':`<div class="confirm"><span>${acct.loading?'Łączenie z serwerem kont…':'Brak połączenia z serwerem kont. Ucz się dalej — postępy zapisują się w tej przeglądarce i wyślą się, gdy połączenie wróci.'}</span>${acct.loading?'':'<button class="ghost" data-act="kRetry">Połącz ponownie</button>'}</div>`;
+  let main='';
+  if(V==='profil'){
+    const cards=['kosci','wiezadla'].map(sec=>{const s=secStats(sec),pc=s.total?Math.round(s.known/s.total*100):0;
+      return `<div class="k-sec"><span class="lab">${SECS[sec].name}</span><b>${s.known}<small>/${s.total}</small></b><span class="bar" role="img" aria-label="${pc}% opanowane"><i style="width:${pc}%"></i></span><em>${pc}% opanowane · ${s.exams?`kolokwium ${s.best_exam}%`:'bez kolokwium'}</em></div>`}).join('');
+    const exN=prog.exams.length,best=Math.max(secStats('kosci').best_exam,secStats('wiezadla').best_exam),st=dayStreak();
+    const ex=prog.exams.slice(-6).reverse();
+    main=`<div class="k-secs">${cards}</div><div class="k-stats"><div>${ki('flame')}<b>${st}</b><span>${st===1?'dzień':'dni'} z rzędu</span></div><div>${ki('exam')}<b>${exN}</b><span>kolokwiów</span></div><div>${ki('trophy')}<b>${exN?best+'%':'—'}</b><span>najlepszy wynik</span></div></div>`
+      +(!acct.noAva&&!me.avatar?`<div class="k-tip">${ava(me,36)}<span>Dodaj zdjęcie profilowe — pokaże się w rankingu.</span>${camBtn('ghost sm k-up','Dodaj zdjęcie')}</div>`:'')
+      +(ex.length?'<h2 class="k-h2">Ostatnie kolokwia</h2><ul class="exams">'+ex.map(x=>{const d=new Date(x.t*1000),pc=x.m?Math.round(x.p/x.m*100):0;return `<li><span class="dt">${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}</span><span class="sc">${esc(SECS[x.sec||'kosci'].name)} · ${esc(x.sc==='all'?'całość':x.sc)} · ${x.n} st.</span><span class="pt">${x.p}/${x.m}<small>${pc}%</small></span></li>`}).join('')+'</ul>':'<p class="note">Tu pojawią się Twoje kolokwia — zrób pierwsze w zakładce Kolokwium.</p>');
+  }else if(V==='ranking'){
+    main=kRank();
+  }else{
+    main=`<section class="k-card"><h3>Profil</h3>`
+      +(acct.noAva?'':`<div class="k-photo">${ava(me,56)}<div class="row">${camBtn('ghost k-up','Zmień zdjęcie')}${me.avatar?'<button class="link" data-act="kAvaDel">usuń zdjęcie</button>':''}</div></div>`)
+      +`<form data-form="kNick" novalidate class="k-form inline">${nickFld('Nick',me.nick)}<div class="row"><button class="ghost"${dis}>Zapisz nick</button></div></form></section>`
+      +`<section class="k-card"><h3>Hasło</h3><form data-form="kNewPass" novalidate class="k-form">${pwd('k-np','Nowe hasło','new-password',1)}${pwd('k-np2','Powtórz nowe hasło','new-password')}<div class="row"><button class="ghost"${dis}>Zmień hasło</button></div></form></section>`
+      +`<section class="k-card"><h3>Konto</h3><p class="note">E-mail: <b>${esc((acct.s.user&&acct.s.user.email)||'')}</b>${since?' · konto od '+since:''}</p><div class="row"><button class="ghost" data-act="kLogout">${ki('logout','ki sm')}Wyloguj się</button></div>`
+      +(acct.del?'<div class="confirm"><span>Usunąć konto razem z postępami, zdjęciem i wpisem w rankingu? Tego nie da się cofnąć.</span><button class="go" data-act="kDelYes" style="background:var(--bad)">Tak, usuń konto</button><button class="ghost" data-act="kDelNo">Anuluj</button></div>':'<div class="row"><button class="link danger" data-act="kDel">Usuń konto</button></div>')
+      +'</section>';
+  }
+  body=nav+kMsg()+off+`<div class="k-view" role="tabpanel" aria-labelledby="k-t-${V}">${main}</div>`;
+  panel(el,{label:'Konto',term:head,body,calm:true});done();
+  if(V==='ranking')kRankLoad(false);
 }
+function kSyncHTML(){return `<span class="dot ${sync.ref?(sync.state==='synced'&&!sync.dirty?'ok':''):'bad'}"></span>${sync.ref?(sync.dirty?'czeka na zapis':'zapisano na koncie'):acct.loading?'łączenie…':'offline'}`}
+function kSyncUpd(){const e=$('#k-syncst');if(e)e.innerHTML=kSyncHTML()}
 const val=id=>{const e=$('#'+id);return e?e.value:''};
 async function kRun(fn){
   if(acct.busy)return;acct.busy=true;acct.msg=null;kRender();
   try{await fn();if(acct.msg&&acct.msg.ok)acct.fresh=true}catch(e){acct.msg={ok:false,t:e.message||'Coś poszło nie tak.'}}
   acct.busy=false;kRender();
 }
+// ---------- zdjęcie profilowe: kadrowanie i wysyłka ----------
+const CROP={W:560,img:null,z:1,x:0,y:0,url:''};
+function cropGeom(){const C=CROP,s=C.W/Math.min(C.img.width,C.img.height)*C.z,dw=C.img.width*s,dh=C.img.height*s;
+  C.x=Math.max(-(dw-C.W)/2,Math.min((dw-C.W)/2,C.x));C.y=Math.max(-(dh-C.W)/2,Math.min((dh-C.W)/2,C.y));
+  return {dw,dh,x:(C.W-dw)/2+C.x,y:(C.W-dh)/2+C.y}}
+function cropDraw(){
+  const cv=$('#k-cv');if(!cv||!CROP.img)return;const c=cv.getContext('2d'),W=CROP.W,g=cropGeom();
+  c.clearRect(0,0,W,W);c.drawImage(CROP.img,g.x,g.y,g.dw,g.dh);
+  c.fillStyle='rgba(11,17,23,.55)';c.beginPath();c.rect(0,0,W,W);c.arc(W/2,W/2,W/2-3,0,Math.PI*2);c.fill('evenodd');
+  c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=3;c.beginPath();c.arc(W/2,W/2,W/2-3,0,Math.PI*2);c.stroke();
+}
+function cropOpen(file){
+  if(!file)return;
+  if(file.type&&!/^image\//.test(file.type)){acct.msg={ok:false,t:'To nie jest zdjęcie — wybierz plik JPG albo PNG.'};return kRender()}
+  if(file.size>25e6){acct.msg={ok:false,t:'Zdjęcie jest za duże (maks. 25 MB).'};return kRender()}
+  if(CROP.url)URL.revokeObjectURL(CROP.url);
+  const url=CROP.url=URL.createObjectURL(file),img=new Image();
+  img.onerror=()=>{acct.msg={ok:false,t:'Nie udało się wczytać zdjęcia — wybierz plik JPG albo PNG.'};kRender()};
+  img.onload=()=>{
+    Object.assign(CROP,{img,z:1,x:0,y:0});
+    let d=$('#k-crop');
+    if(!d){
+      d=document.createElement('dialog');d.id='k-crop';d.className='news k-crop';d.setAttribute('aria-labelledby','k-crop-h');
+      d.innerHTML=`<div class="nw"><div class="label">Zdjęcie profilowe</div><h2 class="term" id="k-crop-h">Ustaw kadr</h2>`
+        +`<div class="crop"><canvas id="k-cv" width="${CROP.W}" height="${CROP.W}" tabindex="0" aria-label="Podgląd zdjęcia. Przeciągnij albo użyj strzałek, żeby przesunąć."></canvas></div>`
+        +`<label class="in zoom">Powiększenie<input type="range" id="k-zoom" min="1" max="4" step="0.01" value="1"></label>`
+        +`<p class="note">Przeciągnij zdjęcie, żeby ustawić twarz w kółku.</p><p class="status bad" id="k-crop-err" role="alert" hidden></p>`
+        +`<div class="row"><button class="ghost" data-act="kCropNo">Anuluj</button><button class="go" data-act="kCropYes">Zapisz zdjęcie</button></div></div>`;
+      document.body.appendChild(d);
+      const cv=d.querySelector('#k-cv');let drag=null;
+      const k=()=>CROP.W/cv.getBoundingClientRect().width;
+      cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY};cv.setPointerCapture(e.pointerId);e.preventDefault()});
+      cv.addEventListener('pointermove',e=>{if(!drag)return;CROP.x+=(e.clientX-drag.x)*k();CROP.y+=(e.clientY-drag.y)*k();drag={x:e.clientX,y:e.clientY};cropDraw()});
+      const end=()=>{drag=null};cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+      cv.addEventListener('wheel',e=>{e.preventDefault();CROP.z=Math.max(1,Math.min(4,CROP.z*(e.deltaY<0?1.08:1/1.08)));d.querySelector('#k-zoom').value=CROP.z;cropDraw()},{passive:false});
+      cv.addEventListener('keydown',e=>{const m={ArrowLeft:[1,0],ArrowRight:[-1,0],ArrowUp:[0,1],ArrowDown:[0,-1]}[e.key];if(m){e.preventDefault();CROP.x+=m[0]*20;CROP.y+=m[1]*20;cropDraw()}});
+      d.querySelector('#k-zoom').addEventListener('input',e=>{CROP.z=+e.target.value;cropDraw()});
+      d.addEventListener('close',()=>{CROP.img=null;if(CROP.url){URL.revokeObjectURL(CROP.url);CROP.url=''}});
+    }
+    d.querySelector('#k-zoom').value=1;const er=d.querySelector('#k-crop-err');er.hidden=true;
+    const b=d.querySelector('[data-act=kCropYes]');b.disabled=false;b.textContent='Zapisz zdjęcie';
+    if(!d.open){if(typeof d.showModal==='function')d.showModal();else d.setAttribute('open','')}
+    cropDraw();
+  };
+  img.src=url;
+}
+function cropBlob(){
+  return new Promise((res,rej)=>{
+    const O=256,c=document.createElement('canvas');c.width=c.height=O;const x=c.getContext('2d'),g=cropGeom(),k=O/CROP.W;
+    x.fillStyle='#fff';x.fillRect(0,0,O,O);x.imageSmoothingQuality='high';x.drawImage(CROP.img,g.x*k,g.y*k,g.dw*k,g.dh*k);
+    c.toBlob(b=>b?res(b):rej(new Error('Nie udało się przygotować zdjęcia.')),'image/jpeg',0.86);
+  });
+}
+const avaPath=()=>'/storage/v1/object/avatars/'+acct.s.user.id+'/avatar.jpg';
+async function avaSet(v){
+  const r=await sbReq('/rest/v1/profiles?id=eq.'+acct.s.user.id,{method:'PATCH',prefer:'return=representation',body:{avatar:v}});
+  acct.me.avatar=r&&r[0]?r[0].avatar:v;kTab();acct.rank.t=0;
+}
 const NICK_RE=/^[A-Za-z0-9ĄĆĘŁŃÓŚŹŻąćęłńóśźż_.-]{3,20}$/;
 Object.assign(ACT,{
   kMode(el){acct.mode=el.dataset.v;acct.msg=null;kRender()},
+  kView(el){acct.view=el.dataset.v;acct.msg=null;acct.del=false;kRender();const t=$('#k-t-'+acct.view);if(t)t.focus()},
   kSec(el){acct.rank.sec=el.dataset.v;acct.rank.rows=null;acct.rank.t=0;kRender()},
   kBy(el){acct.rank.by=el.dataset.v;acct.rank.rows=null;acct.rank.t=0;kRender()},
+  kEye(el){const id=el.dataset.v,i=$('#'+id);if(!i)return;const v=acct.eye[id]=i.type==='password';i.type=v?'text':'password';el.setAttribute('aria-pressed',v);el.setAttribute('aria-label',v?'Ukryj hasło':'Pokaż hasło');el.innerHTML=ki(v?'eyeOff':'eye');i.focus()},
+  kPwIn(el){pwShow(el.id)},
+  kNickIn(){nickCheck()},
+  kFile(el){const f=el.files&&el.files[0];el.value='';acct.msg=null;cropOpen(f)},
+  kCropNo(){const d=$('#k-crop');if(d&&d.open)d.close()},
+  async kCropYes(el){
+    const d=$('#k-crop'),er=$('#k-crop-err');if(!CROP.img||el.disabled)return;
+    el.disabled=true;el.textContent='Zapisywanie…';er.hidden=true;
+    try{
+      const blob=await cropBlob();
+      try{await sbReq(avaPath(),{method:'POST',raw:blob,ctype:'image/jpeg',headers:{'x-upsert':'true','cache-control':'3600'}})}
+      catch(e){if(e.code==='unavailable'||/za duże|format/.test(e.message))throw e;throw new Error('Nie udało się zapisać zdjęcia — zdjęcia profilowe są chwilowo niedostępne.')}
+      await avaSet(acct.s.user.id+'/avatar.jpg?v='+Date.now());
+      d.close();acct.msg={ok:true,t:'Zdjęcie profilowe zapisane.'};acct.fresh=true;kRender();
+    }catch(e){er.textContent=e.message||'Nie udało się zapisać zdjęcia.';er.hidden=false;el.disabled=false;el.textContent='Spróbuj ponownie'}
+  },
+  kAvaDel(){kRun(async()=>{
+    try{await sbReq(avaPath(),{method:'DELETE'})}catch(e){if(e.code==='unavailable')throw e}
+    await avaSet(null);acct.msg={ok:true,t:'Zdjęcie usunięte.'};
+  })},
   kLogin(){const email=val('k-email').trim(),pass=val('k-pass');kRun(async()=>{
     if(!email||!pass)throw new Error('Podaj e-mail i hasło.');
     const j=await sbReq('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email,password:pass}});
-    authSave(authFromToken(j));acct.mode='login';await acctLoad();acct.msg={ok:true,t:'Zalogowano. Postępy z tej przeglądarki zostały połączone z kontem.'};
+    authSave(authFromToken(j));acct.mode='login';acct.view='profil';await acctLoad();acct.msg={ok:true,t:'Zalogowano. Postępy z tej przeglądarki zostały połączone z kontem.'};
   })},
   kRegister(){const nick=val('k-nick').trim(),email=val('k-email').trim(),pass=val('k-pass'),pass2=val('k-pass2');kRun(async()=>{
     if(!NICK_RE.test(nick))throw new Error(AERR['23514']);
@@ -1512,10 +1767,10 @@ Object.assign(ACT,{
     if(pass.length<8)throw new Error('Hasło musi mieć co najmniej 8 znaków.');
     if(pass!==pass2)throw new Error('Hasła się różnią.');
     const free=await sbReq('/rest/v1/rpc/nick_available',{method:'POST',auth:false,body:{n:nick}});
-    if(free===false)throw new Error(AERR['23505']);
+    if(free===false){acct.nk={v:nick,ok:false};throw new Error(AERR['23505'])}
     const red=encodeURIComponent(location.origin+location.pathname);
     const j=await sbReq('/auth/v1/signup?redirect_to='+red,{method:'POST',auth:false,body:{email,password:pass,data:{nick}}});
-    if(j&&j.access_token){authSave(authFromToken(j));await acctLoad();acct.msg={ok:true,t:'Konto założone — witaj, '+nick+'! Postępy zapisują się na koncie.'}}
+    if(j&&j.access_token){authSave(authFromToken(j));acct.view='profil';await acctLoad();acct.msg={ok:true,t:'Konto założone — witaj, '+nick+'! Postępy zapisują się na koncie.'}}
     else{acct.mode='login';acct.msg={ok:true,t:'Prawie gotowe! Wysłaliśmy link aktywacyjny na '+email+'. Kliknij go (sprawdź też spam), a potem zaloguj się.'}}
   })},
   kReset(){const email=val('k-email').trim();kRun(async()=>{
@@ -1539,35 +1794,50 @@ Object.assign(ACT,{
   kLogout(){kRun(async()=>{
     clearTimeout(sync.timer);if(sync.dirty&&sync.ref){try{await sync.push()}catch(e){}}
     try{await sbReq('/auth/v1/logout?scope=local',{method:'POST'})}catch(e){}
-    authSave(null);acct.me=null;acct.remote={};wipeLocal();kTab();acct.mode='login';acct.msg={ok:true,t:'Wylogowano. Postępy są bezpieczne na koncie, a z tej przeglądarki zostały usunięte.'};
+    authSave(null);acct.me=null;acct.remote={};wipeLocal();kTab();acct.mode='login';acct.view='profil';acct.msg={ok:true,t:'Wylogowano. Postępy są bezpieczne na koncie, a z tej przeglądarki zostały usunięte.'};
   })},
   kDel(){acct.del=true;kRender()},
   kRetry(){kRun(async()=>{await acctLoad();if(sync.ref)acct.msg={ok:true,t:'Połączono — postępy zsynchronizowane.'};else throw new Error((acct.msg&&acct.msg.t)||'Nadal brak połączenia.')})},
   kDelNo(){acct.del=false;kRender()},
   kDelYes(){acct.del=false;kRun(async()=>{
+    if(acct.me&&acct.me.avatar){try{await sbReq(avaPath(),{method:'DELETE'})}catch(e){}}
     await sbReq('/rest/v1/rpc/delete_user',{method:'POST',body:{}});
-    authSave(null);acct.me=null;acct.remote={};wipeLocal();kTab();acct.msg={ok:true,t:'Konto zostało usunięte.'};
+    authSave(null);acct.me=null;acct.remote={};wipeLocal();kTab();acct.view='profil';acct.msg={ok:true,t:'Konto zostało usunięte.'};
   })}
 });
 
 
 // ================= nowości
-const APP_VER='1.0.2';
+const APP_VER='1.0.3';
 const NI={
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 20.5c1.4-3.8 4.4-5.5 8-5.5s6.6 1.7 8 5.5"/>',
   trophy:'<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5"/><path d="M12 14v4M8.5 20.5h7"/>',
   chart:'<path d="M5 20V11M11 20V5M17 20v-6M3 20.5h18"/>',
-  sync:'<path d="M19.5 10.5A7.7 7.7 0 0 0 5.8 7L4.5 8.5"/><path d="M4.5 4v4.5H9"/><path d="M4.5 13.5A7.7 7.7 0 0 0 18.2 17l1.3-1.5"/><path d="M19.5 20v-4.5H15"/>'
+  sync:'<path d="M19.5 10.5A7.7 7.7 0 0 0 5.8 7L4.5 8.5"/><path d="M4.5 4v4.5H9"/><path d="M4.5 13.5A7.7 7.7 0 0 0 18.2 17l1.3-1.5"/><path d="M19.5 20v-4.5H15"/>',
+  cam:'<path d="M3.5 8.5a2 2 0 0 1 2-2h2l1.5-2h6l1.5 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/>',
+  layout:'<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M3.5 9h17M9 9v10.5"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8.5-8.5M16 7l2.5 2.5M14 9l2 2"/>'
 };
 // najnowsza wersja na początku; sb:1 = tylko gdy są konta (wersja na GitHub Pages)
-const NEWS=[{v:'1.0.2',items:[
+const NEWS=[{v:'1.0.3',items:[
+  {ic:'cam',sb:1,t:'Zdjęcie profilowe',d:'Dodaj zdjęcie — wykadrujesz je w aplikacji, a pokaże się w profilu, w zakładce i w rankingu.'},
+  {ic:'layout',sb:1,t:'Nowy wygląd konta',d:'Profil, Ranking i Ustawienia w osobnych zakładkach; postęp każdego działu na pasku.'},
+  {ic:'trophy',sb:1,t:'Lepszy ranking',d:'Zdjęcia przy nickach, medale dla podium i Twoje miejsce zawsze na górze.'},
+  {ic:'key',sb:1,t:'Wygodniejsze logowanie',d:'Podgląd hasła, ocena jego siły i sprawdzanie, czy nick jest wolny, od razu przy wpisywaniu.'}
+]},{v:'1.0.2',items:[
   {ic:'user',sb:1,t:'Konta',d:'Załóż konto: nick, e-mail i hasło. Ucz się na telefonie i komputerze — wszędzie zobaczysz te same postępy.'},
   {ic:'trophy',sb:1,t:'Ranking',d:'Opanowane struktury, najlepsze kolokwium i seria dni — osobno dla kości i więzadeł. W rankingu widać tylko nick.'},
   {ic:'chart',sb:1,t:'Profil',d:'Wyniki z obu działów i ostatnie kolokwia w zakładce z Twoim nickiem.'},
   {ic:'sync',t:'Pewniejszy zapis postępów',d:SB?'Bez internetu postępy czekają w przeglądarce i same wysyłają się na konto, gdy połączenie wróci. Zmiany z kilku urządzeń łączą się — nic nie ginie.':'Zmiany z kilku urządzeń łączą się teraz ze sobą — nic nie ginie.'}
 ]}];
-function newsOpen(){
-  const items=NEWS[0].items.filter(x=>!x.sb||SB);if(!items.length)return false;
+function newsList(seen){
+  const vis=NEWS.map(n=>({v:n.v,items:n.items.filter(x=>!x.sb||SB)})).filter(n=>n.items.length);
+  const i=seen?NEWS.findIndex(n=>n.v===seen):-1;
+  if(i<0)return vis.slice(0,1);
+  return vis.filter(n=>NEWS.findIndex(m=>m.v===n.v)<i);
+}
+function newsOpen(seen){
+  const L=newsList(seen);if(!L.length)return false;
   let d=$('#news');
   if(!d){
     d=document.createElement('dialog');d.id='news';d.className='news';d.setAttribute('aria-labelledby','news-h');
@@ -1576,23 +1846,25 @@ function newsOpen(){
     document.body.appendChild(d);
   }
   const cta=SB&&!acct.on;
-  d.innerHTML=`<div class="nw"><div class="label">Nowości · wersja ${APP_VER}</div><h2 class="term" id="news-h">Co nowego w Nominie</h2><ul>`
-    +items.map(x=>`<li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${NI[x.ic]}</svg></span><div><b>${x.t}</b><span>${x.d}</span></div></li>`).join('')
-    +`</ul><div class="row">${cta?'<button class="ghost" data-act="newsClose">Później</button><button class="go" data-act="newsAcct" autofocus>Załóż konto</button>':'<button class="go" data-act="newsClose" autofocus>Zaczynam naukę</button>'}</div></div>`;
+  const li=x=>`<li><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">${NI[x.ic]}</svg></span><div><b>${x.t}</b><span>${x.d}</span></div></li>`;
+  d.innerHTML=`<div class="nw"><div class="label">Nowości · wersja ${APP_VER}</div><h2 class="term" id="news-h">Co nowego w Nominie</h2>`
+    +L.map((n,k)=>(L.length>1?`<h3 class="nv">${k?'Wcześniej — ':''}wersja ${n.v}</h3>`:'')+'<ul>'+n.items.map(li).join('')+'</ul>').join('')
+    +`<div class="row">${cta?'<button class="ghost" data-act="newsClose">Później</button><button class="go" data-act="newsAcct" autofocus>Załóż konto</button>':'<button class="go" data-act="newsClose" autofocus>Zaczynam naukę</button>'}</div></div>`;
   if(d.open)return true;
   if(typeof d.showModal==='function')d.showModal();else d.setAttribute('open','');
   return true;
 }
 function newsClose(){const d=$('#news');if(!d)return;if(typeof d.close==='function'&&d.open)d.close();else{d.removeAttribute('open');LS.set('nomina-ver',APP_VER)}}
 Object.assign(ACT,{
-  newsShow(){newsOpen()},
+  newsShow(){newsOpen(null)},
   newsClose(){newsClose()},
   newsAcct(){newsClose();acct.mode='register';acct.msg=null;show('konto');setTimeout(()=>{const i=$('#k-nick');if(i)i.focus()},60)}
 });
 function newsAuto(){
   // pierwsze otwarcie albo nowa wersja; nie przy powrocie z linku z e-maila i nie w testach automatycznych
   if(window.__NO_NEWS||acct.fromLink||acct.recovery)return;
-  if(LS.get('nomina-ver',null)!==APP_VER)newsOpen();
+  const seen=LS.get('nomina-ver',null);
+  if(seen!==APP_VER&&!newsOpen(seen))LS.set('nomina-ver',APP_VER);
 }
 
 // ================= nawigacja =================

@@ -14,12 +14,22 @@ Aplikacja pokazuje strukturę wskazaną szpilką na rycinie, a Ty wpisujesz jej 
 - **Postępy** — co już umiesz, czego trzeba powtórzyć, historia kolokwiów.
 - Dwa działy: **Kości** (osteologia) i **Więzadła** (syndesmologia).
 
-- **Konto** (opcjonalnie) — rejestracja e-mailem i hasłem, nick, profil z wynikami, **ranking**
+- **Konto** (opcjonalnie) — rejestracja e-mailem i hasłem, nick, **zdjęcie profilowe**, profil z wynikami, **ranking**
   (opanowane struktury, najlepsze kolokwium, seria dni) i postępy wspólne dla telefonu i komputera.
 
 Bez konta postępy zapisują się w przeglądarce (localStorage) na danym urządzeniu.
 
-## Co nowego — wersja 1.0.2
+## Co nowego — wersja 1.0.3
+
+- Zdjęcie profilowe: wybór zdjęcia, kadrowanie w aplikacji, widoczne w profilu, zakładce i rankingu.
+- Nowy wygląd konta: zakładki Profil, Ranking i Ustawienia; postęp działów na paskach.
+- Ranking ze zdjęciami, medalami dla podium i Twoim miejscem na górze.
+- Podgląd hasła, ocena siły hasła i sprawdzanie wolnego nicku od razu przy wpisywaniu.
+
+**Aktualizacja z 1.0.2:** uruchom jeszcze raz cały `supabase.sql` w Supabase (SQL Editor → Run) —
+dodaje miejsce na zdjęcia. Bez tego wszystko działa dalej, tylko bez zdjęć profilowych.
+
+### Wersja 1.0.2
 
 - Konta (nick, e-mail, hasło) i postępy wspólne dla telefonu i komputera.
 - Ranking: opanowane struktury, najlepsze kolokwium, seria dni — osobno dla kości i więzadeł.
@@ -40,7 +50,9 @@ aplikacja działa jak dawniej — bez zakładki **Konto**.
 1. **Projekt.** Załóż konto na supabase.com → **New project**. Nazwa np. `Nomina`, region **Central EU (Frankfurt)**,
    ustaw hasło do bazy (zapisz je gdzieś, aplikacja go nie potrzebuje).
 2. **Baza danych.** W projekcie: **SQL Editor** → **New query** → wklej całą zawartość pliku `supabase.sql` → **Run**.
-   Powinno pojawić się „Success. No rows returned”. (Skrypt można uruchomić ponownie — niczego nie psuje.)
+   Powinno pojawić się „Success. No rows returned”. Jeśli Supabase zapyta o „destructive operation”, kliknij
+   **Run this query** — skrypt usuwa tylko swoje stare zasady dostępu, żeby założyć je od nowa.
+   (Skrypt można uruchamiać ponownie — niczego nie psuje. Uruchom go po każdej aktualizacji Nominy.)
 3. **Adres strony.** **Authentication** → **URL Configuration**:
    - **Site URL**: `https://kajtulax.github.io/Nomina/`
    - **Redirect URLs** → **Add URL**: `https://kajtulax.github.io/Nomina/`
@@ -77,6 +89,8 @@ Wyniki w rankingu wylicza przeglądarka użytkownika, więc to ranking „na sł
   <p>Kliknij, aby ustawić nowe hasło: <a href="{{ .ConfirmationURL }}">ustaw nowe hasło</a></p>
   <p>Jeśli to nie Ty prosiłeś o zmianę hasła, zignoruj tę wiadomość.</p>
   ```
+- Zdjęcia profilowe leżą w **Storage → avatars** (jedno małe zdjęcie JPG na osobę, ok. 5–30 KB; darmowy plan ma 1 GB).
+  Nieodpowiednie zdjęcie usuniesz tam ręcznie.
 - Użytkownika (np. z nieodpowiednim nickiem) usuniesz w **Authentication** → **Users** — razem z jego postępami i wpisem w rankingu.
 
 ## Ryciny i licencje
