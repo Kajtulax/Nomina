@@ -19,6 +19,14 @@ Aplikacja pokazuje strukturę wskazaną szpilką na rycinie, a Ty wpisujesz jej 
 
 Bez konta postępy zapisują się w przeglądarce (localStorage) na danym urządzeniu.
 
+## Co nowego — wersja 1.0.2
+
+- Konta (nick, e-mail, hasło) i postępy wspólne dla telefonu i komputera.
+- Ranking: opanowane struktury, najlepsze kolokwium, seria dni — osobno dla kości i więzadeł.
+- Profil z wynikami i ostatnimi kolokwiami.
+- Pewniejszy zapis postępów: nauka bez internetu wysyła się później, zmiany z kilku urządzeń łączą się.
+- Okienko „Co nowego” po każdej aktualizacji (i link „co nowego?” w stopce).
+
 ## Jak uruchomić
 
 Wystarczy otworzyć `index.html` w przeglądarce albo opublikować repozytorium przez GitHub Pages
