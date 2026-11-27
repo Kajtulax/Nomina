@@ -181,6 +181,16 @@ input.plin{font:500 17px var(--ui)}
 .res .you s.la{font:italic 500 17px var(--latin)}
 .status.ok,.status.bad{font-weight:600}
 .filebtn{display:inline-flex;align-items:center;cursor:pointer;position:relative}
+input[type=email],input[type=password]{min-width:0;width:100%;font:500 17px var(--ui);padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--plate);color:var(--fg)}
+.tabs a[hidden]{display:none}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:2px;counter-reset:none}
+.rank li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;border-bottom:1px dotted var(--line)}
+.rank li:nth-child(-n+3) .pos{background:var(--pin);color:var(--on-pin)}
+.rank .pos{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 12px var(--ui);border:1.5px solid var(--line);font-variant-numeric:tabular-nums}
+.rank .nk{font-weight:600;overflow-wrap:anywhere}
+.rank .val{font:600 15px var(--ui);font-variant-numeric:tabular-nums}.rank .val small{color:var(--muted);font-weight:400}
+.rank li.me{background:var(--pin-bg);border:1px solid var(--pin)}
+.seg{gap:6px}
 .filebtn input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0 0 0 0)}
 .filebtn:focus-within{outline:2px solid var(--pin);outline-offset:2px}
 .term .sub i{font:italic 500 18px var(--latin)}
@@ -308,6 +318,7 @@ svg.plate.click .pn:hover .head{fill:#ffe2b8}
 .label .tag{text-transform:none;letter-spacing:0}
 @media (prefers-reduced-motion:reduce){.prog div{transition:none}.pn .pulse{display:none}.pn.ok .head,.pn.bad .head,svg.plate image.fresh,.panel.fresh>*,.ring .val{animation:none}.panel,.go,.tabs a,.tring .val{transition:none}}
 </style>
+<script src="config.js"></script>
 <style>[hidden]{display:none!important}html{-webkit-text-size-adjust:100%;text-size-adjust:100%}body{margin:0}</style>
 </head>
 <body>
@@ -323,6 +334,7 @@ svg.plate.click .pn:hover .head{fill:#ffe2b8}
       <a href="#atlas" data-act="tab" data-t="atlas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5c3-1.2 6.2-1 9.5 1 3.3-2 6.5-2.2 9.5-1v13.5c-3-1.2-6.2-1-9.5 1-3.3-2-6.5-2.2-9.5-1z"/><path d="M12 6.5V20"/></svg><span>Atlas</span></a>
       <a href="#struktury" data-act="tab" data-t="struktury"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="3"/></svg><span>Struktury</span></a>
       <a href="#postepy" data-act="tab" data-t="postepy"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-7M12 20V5M19 20v-10"/></svg><span>Postępy</span></a>
+      <a href="#konto" data-act="tab" data-t="konto" id="tab-konto" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Konto</span></a>
     </nav>
   </header>
 
@@ -378,6 +390,10 @@ svg.plate.click .pn:hover .head{fill:#ffe2b8}
 
   <section class="view" id="v-postepy" hidden>
     <main class="cols solo wide"><section class="panel" id="g-panel"></section></main>
+  </section>
+
+  <section class="view" id="v-konto" hidden>
+    <main class="cols solo"><section class="panel" id="k-panel" aria-live="polite"></section></main>
   </section>
 
   <footer><p class="made"><span>Nomina · stworzone przez <b>Poziomka Studio</b></span></p>Ryciny kości: BodyParts3D / Anatomography, © The Database Center for Life Science, licencja <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en">CC BY-SA 2.1 JP</a>, przez <a href="https://commons.wikimedia.org/wiki/Category:Anatomography">Wikimedia Commons</a>. Ryciny przycięte, część przebarwiona; szpilki i podpisy dodane. Ryciny więzadeł oraz ryciny kości krzyżowej, skokowej i piętowej opisane jako „rycina Graya”: H. Gray, <i>Anatomy of the Human Body</i> (1918), domena publiczna, przez <a href="https://commons.wikimedia.org/wiki/Category:Gray%27s_Anatomy_plates">Wikimedia Commons</a>; oryginalne podpisy usunięte, szpilki dodane.</footer>
@@ -505,7 +521,8 @@ const sync={ref:null,state:'local',dirty:false,busy:false,timer:0,fails:0,
   async push(){
     if(!this.ref||this.busy||!this.dirty)return;
     this.busy=true;this.dirty=false;
-    try{await this.ref.set({v:1,t:prog.t||0,best:prog.best||0,reset:prog.reset||0,json:JSON.stringify(prog.items),days:JSON.stringify(prog.days),ex:JSON.stringify(prog.exams)});this.fails=0;this.state='synced'}
+    try{const snap=await this.ref.get();if(snap&&snap.exists)mergeRemote(snap.data());
+      await this.ref.set({v:1,t:prog.t||0,best:prog.best||0,reset:prog.reset||0,json:JSON.stringify(prog.items),days:JSON.stringify(prog.days),ex:JSON.stringify(prog.exams)});this.fails=0;this.state='synced'}
     catch(e){
       this.dirty=true;this.fails++;
       const c=e&&e.code;
@@ -515,19 +532,24 @@ const sync={ref:null,state:'local',dirty:false,busy:false,timer:0,fails:0,
     if(this.dirty&&this.ref)this.schedule();
     syncNote();
   },
+  async attach(ref){
+    // pobierz zapis z serwera, połącz z lokalnym (nowsze wygrywa), a potem zapisuj zmiany na serwer
+    try{
+      const snap=await Promise.race([ref.get(),new Promise((_,rej)=>setTimeout(()=>rej({code:'unavailable',message:'Serwer nie odpowiada.'}),10000))]);
+      let localNewer=true;
+      if(snap&&snap.exists)localNewer=mergeRemote(snap.data());
+      else localNewer=Object.keys(prog.items).length>0||prog.best>0;
+      this.ref=ref;this.state='synced';this.fails=0;
+      if(localNewer){this.dirty=true;this.schedule()}
+    }finally{syncNote()}
+  },
   async init(){
     try{
       if(!window.claude||typeof window.claude.use!=='function')return;
       const [db,user]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
       if(!db||!user)return;
       const id=await user.id();if(!id)return;
-      const ref=db.doc('data/users/'+id+'/progress');
-      const snap=await Promise.race([ref.get(),new Promise((_,rej)=>setTimeout(()=>rej({code:'timeout'}),10000))]);
-      let localNewer=true;
-      if(snap&&snap.exists)localNewer=mergeRemote(snap.data());
-      else localNewer=Object.keys(prog.items).length>0||prog.best>0;
-      this.ref=ref;this.state='synced';
-      if(localNewer){this.dirty=true;this.schedule()}
+      await this.attach(db.doc('data/users/'+id+'/progress'));
     }catch(e){}
     syncNote();
   }
@@ -558,7 +580,7 @@ function mergeRemote(d){
   if(changed){LS.set('osteo-prog',prog);if(TAB==='postepy')gRender();else if(TAB==='atlas')aRender()}
   return localNewer;
 }
-function syncNote(){const el=$('#g-sync');if(el)el.textContent=sync.state==='synced'?'Postępy zapisują się automatycznie — zobaczysz je też na innym urządzeniu.':'Postępy zapisują się tylko w tej przeglądarce.'}
+function syncNote(){const el=$('#g-sync');if(!el)return;el.textContent=sync.state==='synced'?(SB&&acct.me?'Postępy zapisują się na koncie '+acct.me.nick+' — zobaczysz je na każdym urządzeniu po zalogowaniu.':'Postępy zapisują się automatycznie — zobaczysz je też na innym urządzeniu.'):(SB&&acct.on?'Postępy czekają na połączenie z serwerem kont — zapiszą się, gdy wróci internet.':SB?'Postępy zapisują się tylko w tej przeglądarce. Załóż konto albo zaloguj się, żeby mieć je na każdym urządzeniu.':'Postępy zapisują się tylko w tej przeglądarce.')}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&sync.dirty){clearTimeout(sync.timer);sync.push()}});
 
 // ---------- ocena odpowiedzi ----------
@@ -1110,7 +1132,7 @@ function gRender(){
     body+='<h2>Ostatnie kolokwia</h2><ul class="exams">'+ex.map(x=>{const d=new Date(x.t*1000),pc=x.m?Math.round(x.p/x.m*100):0;
       return `<li><span class="dt">${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}</span><span class="sc">${esc(scopeName(x.sc))} · ${x.n} stanowisk</span><span class="pt">${x.p}/${x.m}<small>${pc}%</small></span></li>`}).join('')+'</ul>';
   }
-  body+='<h2>Zapis postępów</h2><p class="note" id="g-sync"></p>'
+  body+='<h2>Zapis postępów</h2><p class="note" id="g-sync"></p>'+(SB?`<div class="row"><button class="go sm" data-act="tab" data-t="konto">${acct.on?'Twoje konto':'Zaloguj się / załóż konto'}</button></div>`:'')
     +(!window.claude?'<p class="note">Kopia w pliku przeniesie postępy na inne urządzenie albo do innej przeglądarki. Wczytana kopia łączy się z obecnymi postępami.</p><div class="row"><button class="ghost" data-act="gExport">Pobierz kopię postępów</button><label class="ghost filebtn">Wczytaj kopię…<input type="file" accept=".json,application/json" data-chg="gImport"></label></div>':'')
     +(gMsg?`<p class="status ${gMsg.ok?'ok':'bad'}">${esc(gMsg.t)}</p>`:'')
     +(gAsk?'<div class="confirm"><span>Usunąć całą historię odpowiedzi — w obu działach, kościach i więzadłach? Tego nie da się cofnąć.</span><button class="go" data-act="gResetYes">Tak, wyczyść</button><button class="ghost" data-act="gResetNo">Anuluj</button></div>':'<div class="row"><button class="ghost" data-act="gReset">Wyczyść postępy</button></div>');
@@ -1262,19 +1284,269 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){const b=$('[data-primary]',view);if(b){e.preventDefault();b.click()}}
 });
 
+// ---------- konta (Supabase, tylko wersja na GitHub Pages) ----------
+const SB=(()=>{try{const c=window.NOMINA_SUPABASE;if(window.claude||!c||!/^https?:\/\//.test(c.url||'')||!c.key)return null;return {url:c.url.trim().replace(/\/+$/,'').replace(/\/(rest|auth)\/v1.*$/,''),key:String(c.key).trim()}}catch(e){return null}})();
+const acct={s:null,me:null,mode:'login',msg:null,busy:false,recovery:false,rank:{sec:'kosci',by:'known',rows:null,err:null,t:0},remote:{},del:false,
+  get on(){return !!(this.s&&this.s.access_token)}};
+const AERR={invalid_credentials:'Nieprawidłowy e-mail lub hasło.',invalid_grant:'Nieprawidłowy e-mail lub hasło.',email_not_confirmed:'Najpierw potwierdź adres e-mail — kliknij link w wiadomości od nas (sprawdź też spam).',
+  user_already_exists:'Konto z tym adresem już istnieje. Zaloguj się albo zresetuj hasło.',email_exists:'Konto z tym adresem już istnieje. Zaloguj się albo zresetuj hasło.',
+  weak_password:'Hasło jest za słabe — użyj co najmniej 8 znaków, w tym cyfry.',over_email_send_rate_limit:'Wysłano już kilka wiadomości. Spróbuj ponownie za kilka minut.',
+  over_request_rate_limit:'Za dużo prób w krótkim czasie. Odczekaj chwilę.',email_address_invalid:'Ten adres e-mail jest nieprawidłowy.',validation_failed:'Sprawdź poprawność adresu e-mail i hasła.',
+  same_password:'Nowe hasło musi się różnić od obecnego.',signup_disabled:'Rejestracja jest wyłączona.',user_not_found:'Nie znaleziono konta.',
+  '23505':'Ten nick jest już zajęty — wybierz inny.','23514':'Nick może mieć 3–20 znaków: litery, cyfry, kropkę, myślnik lub podkreślenie.'};
+function aErr(j,status){
+  const k=j&&(j.error_code||j.code||j.error);
+  if(k&&AERR[k])return AERR[k];
+  const m=String((j&&(j.msg||j.message||j.error_description))||'');
+  if(/invalid login/i.test(m))return AERR.invalid_credentials;
+  if(/database error saving new user/i.test(m))return 'Nie udało się założyć konta — ten nick jest już zajęty albo ma niedozwolone znaki. Wybierz inny.';
+  if(/already registered/i.test(m))return AERR.user_already_exists;
+  if(/password/i.test(m)&&/(at least|weak|short)/i.test(m))return AERR.weak_password;
+  if(status===429)return AERR.over_request_rate_limit;
+  if(status>=500)return 'Serwer kont chwilowo nie odpowiada. Spróbuj za moment.';
+  return m||('Błąd ('+status+').');
+}
+function authSave(s){acct.s=s;try{if(s)localStorage.setItem('nomina-auth',JSON.stringify(s));else localStorage.removeItem('nomina-auth')}catch(e){}}
+function authFromToken(j){return j&&j.access_token?{access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||(now()+(+j.expires_in||3600)),user:j.user?{id:j.user.id,email:j.user.email}:null}:null}
+async function sbReq(path,o){
+  o=o||{};
+  if(o.auth!==false&&acct.s){await authFresh();if(!acct.s){const e=new Error('Sesja wygasła — zaloguj się ponownie.');e.code='session';throw e}}
+  const h={apikey:SB.key,'Content-Type':'application/json'};
+  if(o.auth!==false&&acct.s)h.Authorization='Bearer '+acct.s.access_token;
+  if(o.prefer)h.Prefer=o.prefer;
+  let r;
+  try{r=await fetch(SB.url+path,{method:o.method||'GET',headers:h,body:o.body!==undefined?JSON.stringify(o.body):undefined,keepalive:!!o.keepalive&&document.visibilityState==='hidden'})}
+  catch(e){const x=new Error('Brak połączenia z serwerem kont. Postępy zapisują się w tej przeglądarce i wyślą się później.');x.code='unavailable';throw x}
+  const txt=await r.text();let j=null;try{j=txt?JSON.parse(txt):null}catch(e){}
+  if(r.status===401&&o.auth!==false&&acct.s&&!o.retried){acct.s.expires_at=0;return sbReq(path,Object.assign({},o,{retried:true}))}
+  if(!r.ok){const e=new Error(aErr(j,r.status));e.status=r.status;e.code=r.status>=500||r.status===429?'unavailable':((j&&(j.error_code||j.code||j.error))||'denied');throw e}
+  return j;
+}
+let refreshing=null;
+const authLS=()=>{try{return JSON.parse(localStorage.getItem('nomina-auth')||'null')}catch(e){return null}};
+async function authFresh(){
+  if(!acct.s||acct.s.expires_at-90>now())return;
+  const o=authLS();if(o&&o.access_token&&o.access_token!==acct.s.access_token&&(o.expires_at||0)>(acct.s.expires_at||0)){if(!o.user)o.user=acct.s.user;acct.s=o;if(o.expires_at-90>now())return}
+  if(!refreshing)refreshing=(async()=>{
+    try{
+      const r=await fetch(SB.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:SB.key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:acct.s.refresh_token})});
+      const j=await r.json().catch(()=>null);
+      if(r.ok&&j&&j.access_token){const s=authFromToken(j);if(!s.user)s.user=acct.s.user;authSave(s)}
+      else if(r.status>=400&&r.status<500){authSave(null);acct.me=null;sync.ref=null;sync.state='local';syncNote();if(TAB==='konto')kRender();kTab()}
+    }catch(e){}
+    finally{refreshing=null}
+  })();
+  return refreshing;
+}
+const sbRef=()=>({
+  async get(){const rows=await sbReq('/rest/v1/progress?select=data&user_id=eq.'+acct.s.user.id);return rows&&rows.length?{exists:true,data:()=>rows[0].data}:{exists:false}},
+  async set(d){await sbReq('/rest/v1/progress?on_conflict=user_id',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',keepalive:true,body:{user_id:acct.s.user.id,data:d,updated_at:new Date().toISOString()}});statsPush()}
+});
+// statystyki do rankingu (oba działy)
+function secStats(sec){
+  const keys=new Set();DATA[sec].plates.forEach(p=>(p.pins||[]).forEach(q=>keys.add((q.g||p.bone)+'|'+q.la)));
+  let known=0;keys.forEach(k=>{const s=prog.items[k];if(s&&s.s>=2)known++});
+  const ex=prog.exams.filter(x=>(x.sec||'kosci')===sec);
+  const best=ex.filter(x=>x.n>=10&&x.m).reduce((m,x)=>Math.max(m,Math.round(x.p/x.m*100)),0);
+  const r=acct.remote[sec]||{};
+  return {sec,known,total:keys.size,best_exam:Math.max(best,r.best_exam||0),exams:Math.max(ex.length,r.exams||0),streak:dayStreak()};
+}
+let statsTimer=0;
+function statsPush(){
+  if(!acct.on||!acct.s.user)return;clearTimeout(statsTimer);
+  statsTimer=setTimeout(async()=>{
+    try{const rows=['kosci','wiezadla'].map(sec=>Object.assign({user_id:acct.s.user.id,updated_at:new Date().toISOString()},secStats(sec)));
+      await sbReq('/rest/v1/stats?on_conflict=user_id,sec',{method:'POST',prefer:'resolution=merge-duplicates,return=minimal',body:rows});
+      rows.forEach(r=>{acct.remote[r.sec]=r});acct.rank.t=0}catch(e){}
+  },800);
+}
+async function acctLoad(){
+  // profil i statystyki zalogowanego użytkownika, potem dołączenie zapisu postępów
+  acct.loading=true;
+  try{
+    if(!acct.s.user||!acct.s.user.id){const u=await sbReq('/auth/v1/user');acct.s.user={id:u.id,email:u.email};authSave(acct.s)}
+    const [pr,st]=await Promise.all([sbReq('/rest/v1/profiles?select=nick,created_at&id=eq.'+acct.s.user.id),sbReq('/rest/v1/stats?select=sec,best_exam,exams&user_id=eq.'+acct.s.user.id)]);
+    acct.me=pr&&pr[0]?pr[0]:{nick:'?'};acct.remote={};(st||[]).forEach(r=>{acct.remote[r.sec]=r});
+    kTab();
+    await sync.attach(sbRef());statsPush();
+  }catch(e){if(e.code!=='unavailable')acct.msg={ok:false,t:e.message}}
+  acct.loading=false;
+  if(TAB==='konto')kRender();if(TAB==='postepy')gRender();
+}
+async function acctInit(){
+  if(!SB)return;
+  $('#tab-konto').hidden=false;
+  try{acct.s=JSON.parse(localStorage.getItem('nomina-auth')||'null')}catch(e){acct.s=null}
+  // powrót z linku w e-mailu: #access_token=…&type=signup|recovery|… albo #error=…
+  const h=location.hash.slice(1);
+  if(/(^|&)(access_token|error)=/.test(h)){
+    const q=new URLSearchParams(h);
+    if(q.get('error')){acct.msg={ok:false,t:q.get('error_code')==='otp_expired'?'Ten link wygasł albo został już użyty. Poproś o nowy.':(q.get('error_description')||'Nie udało się potwierdzić linku.').replace(/\+/g,' ')}}
+    else{
+      authSave({access_token:q.get('access_token'),refresh_token:q.get('refresh_token'),expires_at:+q.get('expires_at')||now()+(+q.get('expires_in')||3600),user:null});
+      if(q.get('type')==='recovery'){acct.recovery=true;acct.msg={ok:true,t:'Ustaw nowe hasło do konta.'}}
+      else acct.msg={ok:true,t:'Adres e-mail potwierdzony — jesteś zalogowany.'};
+    }
+    try{history.replaceState(null,'',location.pathname+location.search+'#konto')}catch(e){location.hash='konto'}
+  }
+  kTab();
+  if(acct.on)acctLoad();
+  window.addEventListener('hashchange',()=>{if(/(^#|&)(access_token|error)=/.test(location.hash))location.reload()});
+  const retry=()=>{if(acct.on&&!sync.ref&&!acct.loading)acctLoad()};
+  window.addEventListener('online',retry);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')retry()});
+  window.addEventListener('storage',e=>{
+    if(e.key!=='nomina-auth')return;
+    let n=null;try{n=JSON.parse(e.newValue||'null')}catch(x){}
+    const was=acct.s&&acct.s.user&&acct.s.user.id;
+    if(!n){if(acct.on){acct.s=null;acct.me=null;acct.remote={};wipeLocal();kTab();acct.msg={ok:true,t:'Wylogowano w innej karcie.'};show(TAB)}}
+    else if(was&&n.user&&n.user.id===was){acct.s=n}
+    else location.reload();
+  });
+}
+function kTab(){const t=$('#tab-konto span');if(t)t.textContent=acct.on&&acct.me&&acct.me.nick?acct.me.nick:'Konto'}
+function wipeLocal(){prog={items:{},best:0,t:0,reset:0,days:{},exams:[]};LS.set('osteo-prog',prog);P.dirty=true;sync.ref=null;sync.dirty=false;sync.state='local'}
+const fld=(id,lab,type,ac,extra)=>`<label class="in">${lab}<input type="${type}" id="${id}" autocomplete="${ac}" autocapitalize="off" spellcheck="false"${extra||''}></label>`;
+const kMsg=()=>acct.msg?`<p class="status ${acct.msg.ok?'ok':'bad'}" role="${acct.msg.ok?'status':'alert'}">${esc(acct.msg.t)}</p>`:'';
+function kRank(){
+  const R=acct.rank,metric={known:'opanowane',best_exam:'kolokwium',streak:'seria'};
+  let h='<h2>Ranking</h2><div class="row">'+['kosci','wiezadla'].map(s=>`<button class="${R.sec===s?'go sm':'ghost'}" data-act="kSec" data-v="${s}">${SECS[s].name}</button>`).join('')+'</div>'
+    +'<div class="chips">'+Object.keys(metric).map(m=>`<button class="plain"${R.by===m?' aria-pressed="true" style="border-color:var(--pin);box-shadow:0 0 0 1px var(--pin)"':''} data-act="kBy" data-v="${m}">${{known:'Opanowane struktury',best_exam:'Najlepsze kolokwium',streak:'Seria dni'}[m]}</button>`).join('')+'</div>';
+  if(R.err)h+=`<p class="note">${esc(R.err)}</p>`;
+  else if(!R.rows)h+='<p class="note">Wczytywanie…</p>';
+  else if(!R.rows.length)h+='<p class="note">Nikt jeszcze nie ma wyników w tej kategorii. Możesz być pierwszy!</p>';
+  else{
+    const my=acct.me&&acct.me.nick;
+    h+='<ol class="rank">'+R.rows.map((r,i)=>{const v=R.by==='known'?`${r.known}<small>/${r.total}</small>`:R.by==='best_exam'?`${r.best_exam}<small>%</small>`:`${r.streak}<small> dni</small>`;
+      return `<li class="${r.nick===my?'me':''}"><span class="pos">${i+1}</span><span class="nk">${esc(r.nick)}</span><span class="val">${v}</span></li>`}).join('')+'</ol>';
+    if(my&&!R.rows.some(r=>r.nick===my))h+='<p class="note">Nie ma Cię jeszcze w pierwszej setce — ucz się dalej!</p>';
+  }
+  return h;
+}
+async function kRankLoad(force){
+  // jedno zapytanie naraz; po błędzie nie ponawiaj sam częściej niż co 30 s (bez pętli przy awarii serwera)
+  const R=acct.rank;if(R.loading)return;
+  if(!force&&R.t&&Date.now()-R.t<(R.err?30000:60000))return;
+  R.loading=true;R.err=null;
+  const ord={known:'known.desc,best_exam.desc',best_exam:'best_exam.desc,known.desc',streak:'streak.desc,known.desc'}[R.by];
+  const flt=R.by==='best_exam'?'&best_exam=gt.0':R.by==='streak'?'&streak=gt.0':'&known=gt.0';
+  const key=R.sec+R.by;
+  try{const rows=await sbReq(`/rest/v1/ranking?select=nick,known,total,best_exam,streak&sec=eq.${R.sec}${flt}&order=${ord}&limit=100`,{auth:acct.on});if(key===R.sec+R.by)R.rows=rows}
+  catch(e){if(key===R.sec+R.by){R.rows=null;R.err=e.code==='unavailable'?'Ranking jest chwilowo niedostępny — brak połączenia z serwerem.':e.message}}
+  R.t=Date.now();R.loading=false;
+  if(key!==R.sec+R.by)return kRankLoad(true);
+  if(TAB==='konto')kRender();
+}
+function kRender(){
+  if(!SB)return;
+  const el=$('#k-panel');let body='';
+  const keep={},fid=document.activeElement&&el.contains(document.activeElement)?document.activeElement.id:'';
+  if(!acct.fresh)el.querySelectorAll('input[id]').forEach(i=>{if(i.value)keep[i.id]=i.value});
+  acct.fresh=false;
+  const done=()=>{for(const id in keep){const i=$('#'+id);if(i)i.value=keep[id]}
+    const f=fid&&$('#'+fid);if(f){f.focus();try{const n=f.value.length;f.setSelectionRange(n,n)}catch(e){}}
+    else if(acct.msg&&!acct.msg.ok&&!acct.busy){const b=el.querySelector('.status');if(b&&b.scrollIntoView&&b.getBoundingClientRect().top<0)b.scrollIntoView({block:'center'})}};
+  if(acct.recovery&&acct.on){
+    body=kMsg()+`<form data-form="kNewPass" novalidate>${fld('k-np','Nowe hasło','password','new-password',' minlength="8"')}${fld('k-np2','Powtórz nowe hasło','password','new-password')}<div class="row"><button class="go"${acct.busy?' disabled':''}>Zapisz nowe hasło</button></div></form>`;
+    panel(el,{label:'Konto',term:'Nowe hasło',body,calm:true});return done();
+  }
+  if(!acct.on){
+    const tabs=`<div class="row seg">${[['login','Zaloguj się'],['register','Załóż konto']].map(([m,t])=>`<button class="${acct.mode===m?'go sm':'ghost'}" data-act="kMode" data-v="${m}">${t}</button>`).join('')}</div>`;
+    let f;
+    if(acct.mode==='register')f=`<form data-form="kRegister" novalidate>${fld('k-nick','Nick (widoczny w rankingu)','text','nickname',' maxlength="20" class="plin"')}${fld('k-email','E-mail','email','email')}${fld('k-pass','Hasło (min. 8 znaków)','password','new-password')}${fld('k-pass2','Powtórz hasło','password','new-password')}<p class="note">Postępy z tej przeglądarki zostaną przeniesione na nowe konto.</p><div class="row"><button class="go"${acct.busy?' disabled':''}>${acct.busy?'Zakładanie…':'Załóż konto'}</button></div></form>`;
+    else if(acct.mode==='reset')f=`<form data-form="kReset" novalidate>${fld('k-email','E-mail konta','email','email')}<p class="note">Wyślemy link do ustawienia nowego hasła.</p><div class="row"><button class="go"${acct.busy?' disabled':''}>Wyślij link</button><button type="button" class="link" data-act="kMode" data-v="login">wróć do logowania</button></div></form>`;
+    else f=`<form data-form="kLogin" novalidate>${fld('k-email','E-mail','email','email')}${fld('k-pass','Hasło','password','current-password')}<div class="row"><button class="go"${acct.busy?' disabled':''}>${acct.busy?'Logowanie…':'Zaloguj się'}</button><button type="button" class="link" data-act="kMode" data-v="reset">Nie pamiętasz hasła?</button></div></form>`;
+    body=`<p class="note">Konto zapisuje postępy na serwerze — zalogujesz się na telefonie i komputerze i wszędzie zobaczysz to samo. Nick pojawi się w rankingu (e-mail nigdy nie jest pokazywany).</p>`+(acct.mode==='reset'?'':tabs)+kMsg()+f+kRank();
+    panel(el,{label:'Konto',term:acct.mode==='register'?'Załóż konto':acct.mode==='reset'?'Reset hasła':'Zaloguj się',body,calm:true});done();
+  }else{
+    const me=acct.me||{},cards=['kosci','wiezadla'].map(sec=>{const s=secStats(sec);return `<div class="tile"><span>${SECS[sec].name}</span><b>${s.known}<small style="font-size:15px;color:var(--muted)">/${s.total}</small></b><em>opanowane · kolokwium ${s.best_exam}% · ${s.exams} podejść</em></div>`}).join('');
+    const ex=prog.exams.slice(-8).reverse();
+    body=kMsg()+(sync.ref?'':`<div class="confirm"><span>${acct.loading?'Łączenie z serwerem kont…':'Brak połączenia z serwerem kont. Ucz się dalej — postępy zapisują się w tej przeglądarce i wyślą się, gdy połączenie wróci.'}</span>${acct.loading?'':'<button class="ghost" data-act="kRetry">Połącz ponownie</button>'}</div>`)+`<div class="tiles">${cards}<div class="tile"><span>Seria dni</span><b>${dayStreak()}</b><em>${sync.state==='synced'?'zapisano na koncie':'czeka na wysłanie'}</em></div></div>`
+      +(ex.length?'<h2>Ostatnie kolokwia</h2><ul class="exams">'+ex.map(x=>{const d=new Date(x.t*1000),pc=x.m?Math.round(x.p/x.m*100):0;return `<li><span class="dt">${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}</span><span class="sc">${esc(SECS[x.sec||'kosci'].name)} · ${esc(x.sc==='all'?'całość':x.sc)} · ${x.n} st.</span><span class="pt">${x.p}/${x.m}<small>${pc}%</small></span></li>`}).join('')+'</ul>':'')
+      +kRank()
+      +`<h2>Ustawienia konta</h2><p class="note">E-mail: <b>${esc((acct.s.user&&acct.s.user.email)||'')}</b>${me.created_at?' · konto od '+new Date(me.created_at).toLocaleDateString('pl-PL'):''}</p>`
+      +`<form data-form="kNick" novalidate class="inline">${fld('k-nick','Zmień nick','text','nickname',` maxlength="20" class="plin" value="${esc(me.nick||'')}"`)}<div class="row"><button class="ghost"${acct.busy?' disabled':''}>Zapisz nick</button></div></form>`
+      +`<form data-form="kNewPass" novalidate>${fld('k-np','Nowe hasło','password','new-password')}${fld('k-np2','Powtórz nowe hasło','password','new-password')}<div class="row"><button class="ghost"${acct.busy?' disabled':''}>Zmień hasło</button></div></form>`
+      +'<div class="row"><button class="ghost" data-act="kLogout">Wyloguj się</button>'+(acct.del?'':'<button class="link" data-act="kDel">usuń konto</button>')+'</div>'
+      +(acct.del?'<div class="confirm"><span>Usunąć konto razem z postępami i wpisem w rankingu? Tego nie da się cofnąć.</span><button class="go" data-act="kDelYes" style="background:var(--bad)">Tak, usuń konto</button><button class="ghost" data-act="kDelNo">Anuluj</button></div>':'');
+    panel(el,{label:'Konto',term:esc(me.nick||'…'),body,calm:true});done();
+  }
+  kRankLoad(false);
+}
+const val=id=>{const e=$('#'+id);return e?e.value:''};
+async function kRun(fn){
+  if(acct.busy)return;acct.busy=true;acct.msg=null;kRender();
+  try{await fn();if(acct.msg&&acct.msg.ok)acct.fresh=true}catch(e){acct.msg={ok:false,t:e.message||'Coś poszło nie tak.'}}
+  acct.busy=false;kRender();
+}
+const NICK_RE=/^[A-Za-z0-9ĄĆĘŁŃÓŚŹŻąćęłńóśźż_.-]{3,20}$/;
+Object.assign(ACT,{
+  kMode(el){acct.mode=el.dataset.v;acct.msg=null;kRender()},
+  kSec(el){acct.rank.sec=el.dataset.v;acct.rank.rows=null;acct.rank.t=0;kRender()},
+  kBy(el){acct.rank.by=el.dataset.v;acct.rank.rows=null;acct.rank.t=0;kRender()},
+  kLogin(){const email=val('k-email').trim(),pass=val('k-pass');kRun(async()=>{
+    if(!email||!pass)throw new Error('Podaj e-mail i hasło.');
+    const j=await sbReq('/auth/v1/token?grant_type=password',{method:'POST',auth:false,body:{email,password:pass}});
+    authSave(authFromToken(j));acct.mode='login';await acctLoad();acct.msg={ok:true,t:'Zalogowano. Postępy z tej przeglądarki zostały połączone z kontem.'};
+  })},
+  kRegister(){const nick=val('k-nick').trim(),email=val('k-email').trim(),pass=val('k-pass'),pass2=val('k-pass2');kRun(async()=>{
+    if(!NICK_RE.test(nick))throw new Error(AERR['23514']);
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error(AERR.email_address_invalid);
+    if(pass.length<8)throw new Error('Hasło musi mieć co najmniej 8 znaków.');
+    if(pass!==pass2)throw new Error('Hasła się różnią.');
+    const free=await sbReq('/rest/v1/rpc/nick_available',{method:'POST',auth:false,body:{n:nick}});
+    if(free===false)throw new Error(AERR['23505']);
+    const red=encodeURIComponent(location.origin+location.pathname);
+    const j=await sbReq('/auth/v1/signup?redirect_to='+red,{method:'POST',auth:false,body:{email,password:pass,data:{nick}}});
+    if(j&&j.access_token){authSave(authFromToken(j));await acctLoad();acct.msg={ok:true,t:'Konto założone — witaj, '+nick+'! Postępy zapisują się na koncie.'}}
+    else{acct.mode='login';acct.msg={ok:true,t:'Prawie gotowe! Wysłaliśmy link aktywacyjny na '+email+'. Kliknij go (sprawdź też spam), a potem zaloguj się.'}}
+  })},
+  kReset(){const email=val('k-email').trim();kRun(async()=>{
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error(AERR.email_address_invalid);
+    await sbReq('/auth/v1/recover?redirect_to='+encodeURIComponent(location.origin+location.pathname),{method:'POST',auth:false,body:{email}});
+    acct.mode='login';acct.msg={ok:true,t:'Jeśli konto istnieje, link do zmiany hasła jest już w skrzynce '+email+'.'};
+  })},
+  kNewPass(){const a=val('k-np'),b=val('k-np2');kRun(async()=>{
+    if(a.length<8)throw new Error('Hasło musi mieć co najmniej 8 znaków.');
+    if(a!==b)throw new Error('Hasła się różnią.');
+    await sbReq('/auth/v1/user',{method:'PUT',body:{password:a}});
+    const wasRec=acct.recovery;acct.recovery=false;acct.msg={ok:true,t:'Hasło zmienione.'};
+    if(wasRec&&!acct.me)await acctLoad();
+  })},
+  kNick(){const nick=val('k-nick').trim();kRun(async()=>{
+    if(!NICK_RE.test(nick))throw new Error(AERR['23514']);
+    if(acct.me&&nick===acct.me.nick)return;
+    const r=await sbReq('/rest/v1/profiles?id=eq.'+acct.s.user.id,{method:'PATCH',prefer:'return=representation',body:{nick}});
+    if(r&&r[0])acct.me.nick=r[0].nick;kTab();acct.rank.t=0;acct.msg={ok:true,t:'Nick zmieniony.'};
+  })},
+  kLogout(){kRun(async()=>{
+    clearTimeout(sync.timer);if(sync.dirty&&sync.ref){try{await sync.push()}catch(e){}}
+    try{await sbReq('/auth/v1/logout?scope=local',{method:'POST'})}catch(e){}
+    authSave(null);acct.me=null;acct.remote={};wipeLocal();kTab();acct.mode='login';acct.msg={ok:true,t:'Wylogowano. Postępy są bezpieczne na koncie, a z tej przeglądarki zostały usunięte.'};
+  })},
+  kDel(){acct.del=true;kRender()},
+  kRetry(){kRun(async()=>{await acctLoad();if(sync.ref)acct.msg={ok:true,t:'Połączono — postępy zsynchronizowane.'};else throw new Error((acct.msg&&acct.msg.t)||'Nadal brak połączenia.')})},
+  kDelNo(){acct.del=false;kRender()},
+  kDelYes(){acct.del=false;kRun(async()=>{
+    await sbReq('/rest/v1/rpc/delete_user',{method:'POST',body:{}});
+    authSave(null);acct.me=null;acct.remote={};wipeLocal();kTab();acct.msg={ok:true,t:'Konto zostało usunięte.'};
+  })}
+});
+
 // ================= nawigacja =================
-const TABS=['szpilki','kolokwium','atlas','struktury','postepy'];
+const TABS=['szpilki','kolokwium','atlas','struktury','postepy'].concat(SB?['konto']:[]);
 let TAB='';
 function show(tab){
   if(!TABS.includes(tab))tab='szpilki';
   if(TAB==='kolokwium'&&tab!=='kolokwium')ePause();
   TAB=tab;
   $$('#tabs a').forEach(a=>{if(a.dataset.t===tab)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
-  TABS.forEach(t=>{$('#v-'+t).hidden=t!==tab});
+  ['szpilki','kolokwium','atlas','struktury','postepy','konto'].forEach(t=>{$('#v-'+t).hidden=t!==tab});
   if(tab==='szpilki')pEnter();
   else if(tab==='kolokwium')eRender();
   else if(tab==='atlas')aRender();
   else if(tab==='struktury'){if(!T.started)tStart()}
+  else if(tab==='konto')kRender();
   else gRender();
 }
 function go(tab){
@@ -1299,7 +1571,7 @@ function switchSec(v){
   A.q='';A.Q=null;A.sel=-1;A.focus=null;A.shown=new Set();$('#a-q').value='';
   gAsk=false;pInit();aInit();applySecUI();show(TAB);
 }
-pInit();aInit();applySecUI();
+pInit();aInit();applySecUI();acctInit();
 show(TABS.includes(location.hash.slice(1))?location.hash.slice(1):'szpilki');
 sync.init();
 })();
